@@ -19,17 +19,14 @@ package models
             _maxSpeed = 200;
         }
 
+        public function getLoopingIndex(index:int):int
+        {
+            return index - _iconModels.length * Math.floor(index / _iconModels.length);
+        }
+
         public function getIconModel(index:int):IconModel
         {
-            if (index < 0)
-            {
-                index = _iconModels.length - (Math.abs(index) % _iconModels.length);
-            }
-            else if (index >= _iconModels.length)
-            {
-                index = index % _iconModels.length;
-            }
-            return _iconModels[index];
+            return _iconModels[getLoopingIndex(index)];
         }
 
         public function getSpinning():Signal

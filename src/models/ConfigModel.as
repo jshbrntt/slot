@@ -56,6 +56,11 @@ package models {
             return null;
         }
 
+        public function getReels():Vector.<Vector.<int>>
+        {
+            return _reels;
+        }
+
         public function getPrizes():Dictionary
         {
             return _prizes;

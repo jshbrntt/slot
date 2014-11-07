@@ -1,10 +1,7 @@
 package
 {
-    import controllers.ReelsController;
-
     import engine.core.Scene;
 
-    import flash.events.Event;
     import flash.events.TimerEvent;
     import flash.net.URLLoader;
     import flash.net.URLRequest;
@@ -14,28 +11,30 @@ package
     import models.IconModel;
     import models.ReelModel;
 
+    import starling.display.Button;
     import starling.display.Image;
-    import starling.filters.BlurFilter;
+    import starling.display.Sprite;
+    import starling.events.Event;
+    import starling.textures.Texture;
     import starling.textures.TextureSmoothing;
 
     import views.ReelView;
-    import views.ReelsView;
 
     public class SlotScene extends Scene
 	{
         private var _xmlLoader:URLLoader;
         private var _configModel:ConfigModel;
 
-        private var _reelsModel:ReelModel;
-        private var _reelsView:ReelsView;
-        private var _reelsController:ReelsController;
-
         private var _overlayImage:Image;
-        private var _timer:Timer;
+        private var _spinButton:Button;
+
+        private var _startTimer:Timer;
+        private var _stopTimer:Timer;
+
         private var _startReelIndex:int;
+        private var _stopReelIndex:int;
         private var _reelModels:Vector.<ReelModel>;
         private var _reelViews:Vector.<ReelView>;
-        private var _stopTimer:Timer;
 		
 		public function SlotScene(game:SlotGame)
 		{
@@ -53,13 +52,14 @@ package
             _reelViews = new Vector.<ReelView>();
 		}
 
-        private function onConfigLoaded(event:Event):void
+        private function onConfigLoaded(event:Object):void
         {
             var xml:XML = new XML(event.target.data);
             _configModel = new ConfigModel(xml);
 
             setupReels();
             setupOverlay();
+            setupButtons();
         }
 
         private function setupOverlay():void
@@ -74,7 +74,7 @@ package
         {
             _startReelIndex = 0;
 
-            for (var i:int = 0; i < 3; i++)
+            for (var i:int = 0; i < _configModel.getReels().length; i++)
             {
                 var iconModels:Vector.<IconModel> = new Vector.<IconModel>();
                 var reel:Vector.<int> = _configModel.getReel(i);
@@ -85,7 +85,6 @@ package
                 var reelModel:ReelModel = new ReelModel(iconModels);
                 var reelView:ReelView = new ReelView(reelModel);
                 reelView.scaleX = reelView.scaleY = 6;
-                trace(reelView.height);
                 reelView.x = i * reelView.width + 40;
                 reelView.y = -130;
                 addChild(reelView);
@@ -94,49 +93,109 @@ package
                 _reelViews.push(reelView);
             }
 
-            _timer = new Timer(800, 3);
-            _timer.addEventListener(TimerEvent.TIMER, onTimer);
-            _timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
-            _timer.start();
-
-            _stopTimer = new Timer(10000, 1);
-            _stopTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onStopTimerComplete);
-            _stopTimer.start();
-
-//            var iconModel:IconModel = new IconModel(0);
-//            var iconView:IconView = new IconView(iconModel);
-//
-//            addChild(iconView);
-
-//            _reelsView = new ReelsView(_reelsModel);
-//            _reelsController = new ReelsController(_reelsModel, _reelsView);
+            _startTimer = new Timer(600, _configModel.getReels().length - 1);
+            _stopTimer = new Timer(5000, 1);
         }
 
-        private function onStopTimerComplete(event:TimerEvent):void
+        private function setupButtons():void
         {
-            for each(var reelView:ReelView in _reelViews)
+            var spinButtonUpTexture:Texture = game.assets.getTextureAtlas("iconsTexture").getTexture("spin_up");
+            var spinButtonDownTexture:Texture = game.assets.getTextureAtlas("iconsTexture").getTexture("spin_down");
+            _spinButton = new Button(spinButtonUpTexture, "", spinButtonDownTexture);
+            Image(Sprite(_spinButton.getChildAt(0)).getChildAt(0)).smoothing = TextureSmoothing.NONE;
+            _spinButton.scaleX = _spinButton.scaleY = 6;
+            _spinButton.x = 590;
+            _spinButton.y = 54;
+            addChild(_spinButton);
+            _spinButton.addEventListener(Event.TRIGGERED, startReelSpin);
+        }
+
+        private function startReelSpin(event:Object = null):void
+        {
+            trace("SlotScene.startReelSpin");
+            _spinButton.removeEventListener(Event.TRIGGERED, startReelSpin);
+            _spinButton.enabled = false;
+
+            _startTimer.reset();
+            _startReelIndex = 0;
+
+            startNextReel();
+        }
+
+        private function startNextReel(event:TimerEvent = null):void
+        {
+            trace("SlotScene.startNextReel", _startReelIndex);
+            var reelView:ReelView = _reelViews[_startReelIndex];
+            reelView.spin();
+            _startReelIndex++;
+
+            if(!_startTimer.running)
             {
-                reelView.stop(reelView.getModel().getPosition());
+                _startTimer.addEventListener(TimerEvent.TIMER, startNextReel);
+                _startTimer.start();
             }
+
+            if (_startReelIndex == _reelViews.length)
+            {
+                spinStarted();
+            }
+
+        }
+
+        private function spinStarted():void
+        {
+            trace("SlotScene.spinStarted");
+            if(!_stopTimer.running)
+            {
+                _stopTimer.addEventListener(TimerEvent.TIMER_COMPLETE, stopReelSpin);
+                _stopTimer.start();
+            }
+            _spinButton.addEventListener(Event.TRIGGERED, stopReelSpin);
+            _spinButton.enabled = true;
+        }
+
+        private function stopReelSpin(event:Object = null):void
+        {
+            trace("SlotScene.stopReelSpin");
+            _spinButton.removeEventListener(Event.TRIGGERED, stopReelSpin);
+            _stopTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, stopReelSpin);
+
+            _spinButton.enabled = false;
+
+            _stopTimer.reset();
+            _stopReelIndex = 0;
+
+            stopNextReel();
+        }
+
+        private function stopNextReel():void
+        {
+            if (_stopReelIndex < _reelViews.length)
+            {
+                trace("SlotScene.stopNextReel", _stopReelIndex);
+                var reelView:ReelView = _reelViews[_stopReelIndex];
+                var stopPosition:int = reelView.getModel().getPosition() + randomRange(0, reelView.getModel().getIconModels().length);
+
+                reelView.onStopped = stopNextReel;
+                reelView.stop(stopPosition);
+                _stopReelIndex++;
+            }
+            else
+            {
+                spinFinished();
+            }
+        }
+
+        private function spinFinished():void
+        {
+            trace("SlotScene.spinFinished");
+            _spinButton.enabled = true;
+            _spinButton.addEventListener(Event.TRIGGERED, startReelSpin);
         }
 
         private function randomRange(min:Number, max:Number):Number
         {
             return (Math.floor(Math.random() * (max - min + 1)) + min);
-        }
-
-        private function onTimer(event:TimerEvent):void
-        {
-            var reelView:ReelView = _reelViews[_startReelIndex];
-            reelView.spin();
-            _startReelIndex++;
-
-        }
-
-        private function onTimerComplete(event:TimerEvent):void
-        {
-            _timer.reset();
-            _startReelIndex = 0;
         }
 		
 		override public function update():void 

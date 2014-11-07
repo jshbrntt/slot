@@ -25,29 +25,30 @@ package views
 
         private static var _idMap:Vector.<String> = new <String>
                 [
-                    "club",
-                    "diamond",
-                    "heart",
-                    "spade",
-                    "nine",
-                    "ten",
-                    "jack",
-                    "queen",
-                    "king",
-                    "ace",
-                    "bar_one",
-                    "bar_two",
-                    "bar_three",
-                    "seven_one",
-                    "seven_two",
-                    "seven_three"
+                    "club",         // 0
+                    "diamond",      // 1
+                    "heart",        // 2
+                    "spade",        // 3
+                    "nine",         // 4
+                    "ten",          // 5
+                    "jack",         // 6
+                    "queen",        // 7
+                    "king",         // 8
+                    "ace",          // 9
+                    "bar_one",      // 10
+                    "bar_two",      // 11
+                    "bar_three",    // 12
+                    "seven_one",    // 13
+                    "seven_two",    // 14
+                    "seven_three"   // 15
                 ];
 
         private var _game:SlotGame;
         private var _iconsViews:Vector.<IconView>;
         private var _tweenCount:uint;
         private var _stop:Boolean;
-        private var _stopPosition:int;
+        private var _stopPosition:Number;
+        private var _onStopped:Function;
 
         public function ReelView(model:ReelModel)
         {
@@ -62,7 +63,7 @@ package views
 
         public function stop(stopPosition:int):void
         {
-            _stopPosition = stopPosition;
+            _stopPosition = getModel().getLoopingIndex(stopPosition);
         }
 
         public function spin():void
@@ -80,13 +81,12 @@ package views
             position++;
 
             // Reseting the reel position back to the start if new position is out of bounds.
-            if (position >= getModel().getIconModels().length)
+            if (position == getModel().getIconModels().length)
             {
                 position = 0;
             }
 
             getModel().setPosition(position);
-            trace(getModel().getPosition());
 
             var newIconModel:IconModel = getModel().getIconModel(-2 + getModel().getPosition());
             var newIconView:IconView = new IconView(newIconModel);
@@ -97,7 +97,7 @@ package views
             for (var i:int = 1; i < _iconsViews.length; i++)
             {
                 var iconView:IconView = _iconsViews[i];
-                var tween:Tween = new Tween(iconView, 0.2, Transitions.LINEAR);
+                var tween:Tween = new Tween(iconView, 0.1, Transitions.LINEAR);
                 tween.onComplete = onShiftedReel;
                 tween.animate("y", iconView.y + iconView.height);
                 Starling.juggler.add(tween);
@@ -113,9 +113,9 @@ package views
             if (_tweenCount == 0)
             {
                 // Stop spinning condition.
-                if (_stopPosition && getModel().getPosition() == _stopPosition)
+                if (getModel().getPosition() == _stopPosition)
                 {
-                    onStopped();
+                    stopReel();
                 }
                 else
                 {
@@ -124,9 +124,13 @@ package views
             }
         }
 
-        private function onStopped():void
+        private function stopReel():void
         {
-
+            _stopPosition = NaN;
+            if (onStopped)
+            {
+                onStopped.apply(this);
+            }
         }
 
         private function setupInitialIcons():void
@@ -168,5 +172,14 @@ package views
             return _model as ReelModel;
         }
 
+        public function get onStopped():Function
+        {
+            return _onStopped;
+        }
+
+        public function set onStopped(value:Function):void
+        {
+            _onStopped = value;
+        }
     }
 }
