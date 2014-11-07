@@ -1,12 +1,7 @@
 package engine.mvc 
 {
-	import models.CellModel;
-	import starling.display.DisplayObjectContainer;
-	
-	/**
-	 * View.as
-	 * @author Joshua Barnett
-	 */
+    import starling.display.DisplayObjectContainer;
+
 	public class View extends DisplayObjectContainer
 	{
 		protected var _model:Model;
@@ -21,7 +16,7 @@ package engine.mvc
 		
 		protected function onUpdated():void
 		{
-			// Abstract
+			// abstract
 		}
 	}
 }

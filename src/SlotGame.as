@@ -1,8 +1,8 @@
 package
 {
-	import engine.core.Game;
-	
-	public class SlotGame extends Game
+    import engine.core.Game;
+
+    public class SlotGame extends Game
 	{
 		
 		public function SlotGame()
@@ -12,6 +12,7 @@ package
 		
 		override protected function init():void
 		{
+            super.init();
 			scene = new SlotScene(this);
 		}
 	
