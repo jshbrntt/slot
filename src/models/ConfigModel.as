@@ -3,14 +3,8 @@ package models {
 
     import flash.utils.Dictionary;
 
-    import nape.geom.Vec2;
-
     public class ConfigModel extends Model
     {
-        private static const CONFIG:String = "config";
-        private static const REELS:String = "reels";
-        private static const PRIZES:String = "prizes";
-
         private var _xml:XML;
         private var _reels:Vector.<Vector.<int>>;
         private var _prizes:Dictionary;
