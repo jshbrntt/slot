@@ -22,7 +22,7 @@
         <key>dataFormat</key>
         <string>sparrow</string>
         <key>textureFileName</key>
-        <filename>iconsTexture.png</filename>
+        <filename>sheet.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>iconsData.xml</filename>
+        <filename>data.xml</filename>
         <key>multiPack</key>
         <false/>
         <key>mainExtension</key>
@@ -148,7 +148,7 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>icons</filename>
+            <filename>../textures</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

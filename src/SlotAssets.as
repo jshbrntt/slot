@@ -2,14 +2,19 @@ package
 {
 	public class SlotAssets
 	{
-        [Embed(source="../assets/iconsTexture.png")]
-        public static const iconsTexture:Class;
 
-        [Embed(source="../assets/iconsData.xml", mimeType="application/octet-stream")]
-        public static const iconsData:Class;
+        // Texture Atlases
 
-        [Embed(source="../assets/overlayTexture.png")]
-        public static const overlayTexture:Class;
+        [Embed(source="../assets/atlases/sheet.png")]
+        public static const sheet:Class;
+
+        [Embed(source="../assets/atlases/data.xml", mimeType="application/octet-stream")]
+        public static const data:Class;
+
+        // Fonts
+
+        [Embed(source="../assets/fonts/minecraftia.ttf", embedAsCFF="false", fontFamily="Minecraftia")]
+        public static const makisupa:Class;
 
 	}
 }

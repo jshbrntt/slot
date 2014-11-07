@@ -19,6 +19,11 @@ package models
             _maxSpeed = 200;
         }
 
+        public function getCurrentIconModel():IconModel
+        {
+            return _iconModels[_position];
+        }
+
         public function getLoopingIndex(index:int):int
         {
             return index - _iconModels.length * Math.floor(index / _iconModels.length);
@@ -47,6 +52,22 @@ package models
         public function getIconModels():Vector.<IconModel>
         {
             return _iconModels;
+        }
+
+        public function toString():String
+        {
+            var string:String = "";
+            for each(var iconModel:IconModel in _iconModels)
+            {
+                string += iconModel.getId();
+            }
+            string += "\n";
+            for (var i:int = 0; i < ((_position + 1) % _iconModels.length); i++)
+            {
+                string += " ";
+            }
+            string += "^";
+            return string;
         }
     }
 }

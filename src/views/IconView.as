@@ -12,7 +12,7 @@ package views
 
     public class IconView extends View
     {
-        private static const ATLAS_NAME:String = "iconsTexture";
+        private static const ATLAS_NAME:String = "sheet";
 
         public static var idMap:Vector.<String> = new <String>
         [

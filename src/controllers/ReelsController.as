@@ -1,10 +1,9 @@
 package controllers
 {
     import engine.mvc.Controller;
-    import engine.mvc.Model;
-    import engine.mvc.View;
 
     import models.ReelModel;
+    import models.ReelsModel;
 
     import views.ReelsView;
 
@@ -15,22 +14,12 @@ package controllers
             super(model, view);
         }
 
-        public function startSpin():void
+        public function getModel():ReelsModel
         {
-//            model.startSpin();
+            return _model as ReelsModel;
         }
 
-        public function finishSpin():void
-        {
-
-        }
-
-        protected function get model():ReelModel
-        {
-            return _model as ReelModel;
-        }
-
-        protected function get view():ReelsView
+        public function getView():ReelsView
         {
             return _view as ReelsView;
         }

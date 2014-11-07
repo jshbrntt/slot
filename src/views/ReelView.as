@@ -21,7 +21,7 @@ package views
 
     public class ReelView extends View
     {
-        private static const ATLAS_NAME:String = "iconsTexture";
+        private static const ATLAS_NAME:String = "sheet";
 
         private static var _idMap:Vector.<String> = new <String>
                 [
@@ -157,6 +157,15 @@ package views
                 }
 
                 return new Image(iconTexture);
+            }
+            return null;
+        }
+
+        public function getIconView(index:uint):IconModel
+        {
+            if (index < _iconsViews.length)
+            {
+                return _iconsViews[index].getModel();
             }
             return null;
         }

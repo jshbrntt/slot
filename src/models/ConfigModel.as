@@ -42,7 +42,7 @@ package models {
             // Parse Prizes
             for each (element in _xml.prizes.children())
             {
-                var line:String = element.@line as String;
+                var line:String = element.@line;
                 _prizes[line] = parseFloat(element);
             }
         }

@@ -3,6 +3,7 @@ package
     import engine.core.Scene;
 
     import flash.events.TimerEvent;
+    import flash.globalization.CurrencyFormatter;
     import flash.net.URLLoader;
     import flash.net.URLRequest;
     import flash.utils.Timer;
@@ -15,8 +16,11 @@ package
     import starling.display.Image;
     import starling.display.Sprite;
     import starling.events.Event;
+    import starling.filters.BlurFilter;
+    import starling.text.TextField;
     import starling.textures.Texture;
     import starling.textures.TextureSmoothing;
+    import starling.utils.Color;
 
     import views.ReelView;
 
@@ -35,6 +39,10 @@ package
         private var _stopReelIndex:int;
         private var _reelModels:Vector.<ReelModel>;
         private var _reelViews:Vector.<ReelView>;
+
+        private var _currencyFormatter:CurrencyFormatter;
+        private var _balanceField:TextField;
+        private var _balance:Number;
 		
 		public function SlotScene(game:SlotGame)
 		{
@@ -60,11 +68,29 @@ package
             setupReels();
             setupOverlay();
             setupButtons();
+            setupScore();
+        }
+
+        private function setupScore():void
+        {
+            _currencyFormatter = new CurrencyFormatter("en-GB");
+            _currencyFormatter.setCurrency("GBP", "£");
+            _currencyFormatter.trailingZeros = true;
+
+            _balance = 0;
+
+            _balanceField = new TextField(170, 100, "BALANCE:\n"+_currencyFormatter.format(_balance, true), "Minecraftia", 40, Color.RED);
+            _balanceField.bold = true;
+            _balanceField.autoScale = true;
+            _balanceField.x = 604;
+            _balanceField.y = 214;
+            _balanceField.filter = BlurFilter.createDropShadow(6, 0.785, 0, 1, 0);
+            addChild(_balanceField);
         }
 
         private function setupOverlay():void
         {
-            _overlayImage = new Image(game.assets.getTexture("overlayTexture"));
+            _overlayImage = new Image(game.assets.getTexture("overlay"));
             _overlayImage.smoothing = TextureSmoothing.NONE;
             _overlayImage.scaleX = _overlayImage.scaleY = 6;
             addChild(_overlayImage);
@@ -99,8 +125,8 @@ package
 
         private function setupButtons():void
         {
-            var spinButtonUpTexture:Texture = game.assets.getTextureAtlas("iconsTexture").getTexture("spin_up");
-            var spinButtonDownTexture:Texture = game.assets.getTextureAtlas("iconsTexture").getTexture("spin_down");
+            var spinButtonUpTexture:Texture = game.assets.getTextureAtlas("sheet").getTexture("spin_up");
+            var spinButtonDownTexture:Texture = game.assets.getTextureAtlas("sheet").getTexture("spin_down");
             _spinButton = new Button(spinButtonUpTexture, "", spinButtonDownTexture);
             Image(Sprite(_spinButton.getChildAt(0)).getChildAt(0)).smoothing = TextureSmoothing.NONE;
             _spinButton.scaleX = _spinButton.scaleY = 6;
@@ -191,6 +217,24 @@ package
             trace("SlotScene.spinFinished");
             _spinButton.enabled = true;
             _spinButton.addEventListener(Event.TRIGGERED, startReelSpin);
+
+            var spinResult:String = "";
+            for each(var reelView:ReelView in _reelViews)
+            {
+                var iconModel:IconModel = reelView.getIconView(2);
+                spinResult += iconModel.getId().toString();
+                trace("Reel "+_reelViews.indexOf(reelView)+":");
+                trace(reelView.getModel().toString());
+            }
+
+            trace("spinResult", spinResult);
+            if (_configModel.getPrizes()[spinResult] != undefined)
+            {
+                var prize:Number = _configModel.getPrizes()[spinResult];
+                _balance += prize;
+                _balanceField.text = "BALANCE:\n"+_currencyFormatter.format(_balance, true);
+            }
+
         }
 
         private function randomRange(min:Number, max:Number):Number
