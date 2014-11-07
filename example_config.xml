@@ -10,7 +10,7 @@
         <reel>6,9,7,5,8,6,9,7,5</reel>
         <reel>7,5,8,6,9,7,5,8,6</reel>
     </reels>
-    <prizes>ó
+    <prizes>
         <prize line="555">10.00</prize>
         <prize line="666">20.00</prize>
         <prize line="777">50.00</prize>
