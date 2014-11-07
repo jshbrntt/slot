@@ -51,7 +51,7 @@ package
 		{
 			super.init();
 			_xmlLoader = new URLLoader();
-            _xmlLoader.load(new URLRequest("config.xml"));
+            _xmlLoader.load(new URLRequest("./config.xml"));
             _xmlLoader.addEventListener(Event.COMPLETE, onConfigLoaded);
 
             KeyManager.pressed(Key.SPACE, onSpinButtonTriggered);
