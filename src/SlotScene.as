@@ -4,6 +4,8 @@ package
 
     import engine.core.Scene;
 
+    import flash.events.IOErrorEvent;
+
     import flash.globalization.CurrencyFormatter;
     import flash.net.URLLoader;
     import flash.net.URLRequest;
@@ -17,6 +19,7 @@ package
     import starling.events.Event;
     import starling.filters.BlurFilter;
     import starling.text.TextField;
+    import starling.text.TextFieldAutoSize;
     import starling.textures.Texture;
     import starling.textures.TextureSmoothing;
     import starling.utils.Color;
@@ -28,7 +31,7 @@ package
 
     public class SlotScene extends Scene
 	{
-        private var _xmlLoader:URLLoader;
+        private var _loader:URLLoader;
         private var _configModel:ConfigModel;
 
         private var _reelsModel:ReelsModel;
@@ -41,6 +44,7 @@ package
         private var _currencyFormatter:CurrencyFormatter;
         private var _balanceField:TextField;
         private var _balance:Number;
+        private var _errorField:TextField;
 		
 		public function SlotScene(game:SlotGame)
 		{
@@ -50,14 +54,46 @@ package
 		override protected function init():void
 		{
 			super.init();
-			_xmlLoader = new URLLoader();
-            _xmlLoader.load(new URLRequest("./config.xml"));
-            _xmlLoader.addEventListener(Event.COMPLETE, onConfigLoaded);
+
+            loadConfig("./config.xml");
 
             KeyManager.pressed(Key.SPACE, onSpinButtonTriggered);
 		}
 
-        private function onConfigLoaded(event:Object):void
+        private function loadConfig(url:String):void
+        {
+            _loader = new URLLoader();
+            _loader.addEventListener(Event.COMPLETE, onLoaderComplete);
+            _loader.addEventListener(IOErrorEvent.IO_ERROR, onLoaderError);
+
+            try
+            {
+                _loader.load(new URLRequest(url));
+            }
+            catch (error:SecurityError)
+            {
+                displayError("A SecurityError has occurred.");
+            }
+        }
+
+        private function displayError(text:String):void
+        {
+            _errorField = new TextField(stage.stageWidth, stage.stageHeight, text);
+            _errorField.fontName = "Minecraftia";
+            _errorField.autoScale = true;
+            _errorField.fontSize = 32;
+            _errorField.color = Color.RED;
+            _errorField.bold = true;
+
+            addChild(_errorField);
+        }
+
+        private function onLoaderError(event:IOErrorEvent):void
+        {
+            displayError("Failed to load configuration.");
+        }
+
+        private function onLoaderComplete(event:Object):void
         {
             var xml:XML = new XML(event.target.data);
             _configModel = new ConfigModel(xml);
