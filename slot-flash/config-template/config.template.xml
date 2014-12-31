@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
     <reels>
-        <!-- All Icons are Aces
-        <reel>9,9,9,9,9,9,9,9,9</reel>
-        <reel>9,9,9,9,9,9,9,9,9</reel>
-        <reel>9,9,9,9,9,9,9,9,9</reel>
-        -->
         <reel>5,8,6,9,7,5,8,6,9</reel>
         <reel>6,9,7,5,8,6,9,7,5</reel>
         <reel>7,5,8,6,9,7,5,8,6</reel>

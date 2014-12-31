@@ -12,27 +12,6 @@ package views
 
     public class IconView extends View
     {
-        private static const ATLAS_NAME:String = "sheet";
-
-        public static var idMap:Vector.<String> = new <String>
-        [
-            "club",
-            "diamond",
-            "heart",
-            "spade",
-            "nine",
-            "ten",
-            "jack",
-            "queen",
-            "king",
-            "ace",
-            "bar_one",
-            "bar_two",
-            "bar_three",
-            "seven_one",
-            "seven_two",
-            "seven_three"
-        ];
 
         private var _iconImage:Image;
 
@@ -51,21 +30,21 @@ package views
 
         protected function createIconImage():void
         {
-            if (getModel().getId() < idMap.length - 1)
+            var game:SlotGame = Starling.current.root as SlotGame;
+            var iconTextures:Vector.<Texture> = game.assets.getTextureAtlas("atlas01").getTextures("icon");
+
+            if (getModel().getId() < (iconTextures.length - 1))
             {
-
-                var iconName:String = idMap[getModel().getId()];
-                var iconTexture:Texture = SlotGame(Starling.current.root).assets.getTextureAtlas(ATLAS_NAME).getTexture(iconName);
-
-                if (!iconTexture)
-                {
-                    throw new Error("Icon texture not found.");
-                }
-
+                var iconTexture:Texture = iconTextures[getModel().getId()];
                 _iconImage = new Image(iconTexture);
                 _iconImage.smoothing = TextureSmoothing.NONE;
                 addChild(_iconImage);
             }
+            else
+            {
+                throw new Error("Icon texture not found.");
+            }
+
         }
 
         public function getModel():IconModel

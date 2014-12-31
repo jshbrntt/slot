@@ -4,10 +4,10 @@ package
 
     import utils.KeyManager;
 
-    [SWF(width="800",height="600",frameRate="60")]
-    public class SlotMain extends Engine
+    [SWF(width="800",height="600",frameRate="60",backgroundColor="#ffffff")]
+    public class SlotEngine extends Engine
     {
-        public function SlotMain()
+        public function SlotEngine()
         {
             super(SlotGame);
 

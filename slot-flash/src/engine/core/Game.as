@@ -18,6 +18,7 @@ package engine.core
         public function Game(embedded:Class, debug:Boolean = false)
         {
             _assets = new AssetManager();
+            _assets.verbose = true;
             _debug = debug;
 
             _assets.enqueue(embedded);

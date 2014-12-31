@@ -9,6 +9,7 @@ package
     import flash.globalization.CurrencyFormatter;
     import flash.net.URLLoader;
     import flash.net.URLRequest;
+    import flash.system.Security;
 
     import models.ConfigModel;
     import models.ReelsModel;
@@ -124,7 +125,7 @@ package
 
         private function setupOverlay():void
         {
-            _overlayImage = new Image(game.assets.getTexture("overlay"));
+            _overlayImage = new Image(game.assets.getTexture("ui_overlay"));
             _overlayImage.smoothing = TextureSmoothing.NONE;
             _overlayImage.scaleX = _overlayImage.scaleY = 6;
 
@@ -142,8 +143,8 @@ package
 
         private function setupButtons():void
         {
-            var btnUpTexture:Texture = game.assets.getTextureAtlas("sheet").getTexture("spin_up");
-            var btnDownTexture:Texture = game.assets.getTextureAtlas("sheet").getTexture("spin_down");
+            var btnUpTexture:Texture = game.assets.getTexture("ui_spin_up");
+            var btnDownTexture:Texture = game.assets.getTexture("ui_spin_down");
 
             _spinButton = new Button(btnUpTexture, "", btnDownTexture);
             Image(Sprite(_spinButton.getChildAt(0)).getChildAt(0)).smoothing = TextureSmoothing.NONE;

@@ -1,0 +1,5 @@
+name: slot
+description: Basic slot machine example.
+dependencies:
+  browser: any
+  stagexl: any
