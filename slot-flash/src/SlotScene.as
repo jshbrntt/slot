@@ -91,7 +91,7 @@ package
 
         private function onLoaderError(event:IOErrorEvent):void
         {
-            displayError("Failed to load configuration.");
+            displayError("Failed to load configuration.\nCopy\n/config-template/config.template.xml\nto\n/bin/config.xml");
         }
 
         private function onLoaderComplete(event:Object):void
