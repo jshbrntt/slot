@@ -9,7 +9,7 @@ class SlotEngine extends Engine {
 
     print('SlotEngine.init');
 
-    Engine.init(game);
+    Engine.init(game, 800, 600);
 
   }
 
