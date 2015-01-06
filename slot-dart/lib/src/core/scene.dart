@@ -4,17 +4,26 @@ import 'package:stagexl/stagexl.dart';
 import 'game.dart';
 
 class Scene extends Sprite {
-  Game _game;
+  Game game;
 
   Scene(Game game) {
-    _game = game;
+    this.game = game;
     onAddedToStage.listen(_onAddedToStage);
   }
 
   void _onAddedToStage(Event e) {
-    init();
+    addResources();
+    _loadResources();
   }
 
+  void _loadResources() {
+    print("Scene._loadResources");
+    game.resourceManager.load()
+      .then((_) => init())
+      .catchError((e) => print(e));
+  }
+
+  void addResources();
   void init();
   void update();
   void dispose();
