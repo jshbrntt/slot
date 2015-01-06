@@ -1,0 +1,7 @@
+body {
+    background: lightskyblue;
+}
+canvas {
+    margin: 0 auto;
+    display: block;
+}
