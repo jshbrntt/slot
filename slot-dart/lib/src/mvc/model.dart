@@ -1,6 +1,8 @@
 library slot.mvc.model;
 
-class Model {
+import 'package:stagexl/stagexl.dart';
+
+class Model extends EventDispatcher {
 
   static const String UPDATED = 'updated';
 

@@ -11,10 +11,12 @@ class View extends DisplayObjectContainer {
   
   View(Model model) {
     _model = model;
-    _model.on(Model.UPDATED).listen(onModelUpdated);
+    _model.addEventListener(Model.UPDATED, _onModelUpdated);
   }
   
-  void onModelUpdated();
+  void _onModelUpdated() {
+
+  }
 
   Model get model {
     return _model;
