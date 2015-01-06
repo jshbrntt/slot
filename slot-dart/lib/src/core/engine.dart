@@ -11,15 +11,15 @@ class Engine {
   static Stage _stage;
   static RenderLoop _renderLoop;
 
-  static void init(Game game) {
+  static void init(Game game, num width, num height) {
 
     print('Engine.init');
 
     if (_game == null) {
 
       _game = game;
-      _canvas = new CanvasElement(width: 800, height: 600);
-      _stage = new Stage(_canvas);
+      _canvas = new CanvasElement(width: width, height: height);
+      _stage = new Stage(_canvas, webGL: true);
       _renderLoop = new RenderLoop();
 
       _stage.addChild(_game);
