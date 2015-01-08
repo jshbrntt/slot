@@ -1,6 +1,9 @@
 library slot.views.reels_view;
 
 import 'package:slot/src/mvc/view.dart';
+import 'package:slot/src/models/reels_model.dart';
+import 'package:slot/src/models/reel_model.dart';
+import 'package:slot/src/views/reel_view.dart';
 
 class ReelsView extends View {
 
@@ -21,6 +24,7 @@ class ReelsView extends View {
     for (ReelModel reelModel in reelModels) {
 
       ReelView reelView = new ReelView(reelModel);
+      reelView.x = reelModels.indexOf(reelModel) * reelView.width;
       addChild(reelView);
       _reelViews.add(reelView);
 
@@ -33,7 +37,7 @@ class ReelsView extends View {
   }
 
   ReelsModel get model {
-    return _model as ReelsModel;
+    return super.model as ReelsModel;
   }
 
 }

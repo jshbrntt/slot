@@ -1,9 +1,11 @@
 library slot.mvc.controller;
 
+import 'package:stagexl/stagexl.dart';
+
 import 'model.dart';
 import 'view.dart';
 
-class Controller {
+class Controller extends EventDispatcher {
 
   Model _model;
   View _view;

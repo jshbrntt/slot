@@ -19,8 +19,7 @@ class Scene extends Sprite {
   void _loadResources() {
     print("Scene._loadResources");
     game.resourceManager.load()
-      .then((_) => init())
-      .catchError((e) => print(e));
+      .then((_) => init());
   }
 
   void addResources();

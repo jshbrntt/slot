@@ -4,6 +4,8 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/packages/slot" />
+      <excludeFolder url="file://$MODULE_DIR$/web/assets/atlases/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/web/assets/packages" />
       <excludeFolder url="file://$MODULE_DIR$/web/packages" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />

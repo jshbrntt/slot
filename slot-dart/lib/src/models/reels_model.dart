@@ -26,7 +26,7 @@ class ReelsModel extends Model {
 
       ReelModel reelModel = new ReelModel(iconModels);
 
-      _reelsModel.add(reelModel);
+      _reelModels.add(reelModel);
     }
   }
 

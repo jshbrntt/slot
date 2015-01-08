@@ -65,6 +65,13 @@ class ReelView extends View {
 
   }
 
+  IconView iconView(int index) {
+    if (index < _iconViews.length) {
+      return _iconViews[index].model;
+    }
+    return null;
+  }
+
   void _onShiftedReel() {
     _tweenCount--;
     if (_tweenCount == 0) {
@@ -79,10 +86,8 @@ class ReelView extends View {
 
   void stopReel() {
     _stopPosition = null;
-    if (_onStopped) {
-      {
-        _onStopped.apply(this);
-      }
+    if (_onStopped != null) {
+      _onStopped();
     }
   }
 
@@ -102,5 +107,4 @@ class ReelView extends View {
   void set onStopped(void function()) {
     _onStopped = function;
   }
-
 }
