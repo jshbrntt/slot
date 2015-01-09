@@ -98,7 +98,7 @@ class ReelsController extends Controller {
     _stopReelIndex = 0;
     _stopNextReel();
 
-    dispatchEvent(new ReelsEvent(ReelsEvent.STOPPED, false));
+    dispatchEvent(new ReelsEvent(ReelsEvent.STOPPING, false));
 
   }
 
@@ -128,19 +128,23 @@ class ReelsController extends Controller {
 
     print("controllers.ReelsController.spinFinished");
 
-    String spinResult = "";
+    String result = "";
 
     for (ReelView reelView in view.reelViews) {
 
       IconModel iconModel = reelView.iconView(2);
-      spinResult += iconModel.id.toString();
+      result += iconModel.id.toString();
 
     }
 
-    dispatchEvent(new ReelsEvent(ReelsEvent.STOPPED, false));
+    dispatchEvent(new ReelsEvent(ReelsEvent.STOPPED, false, result: result));
 
     _spinning = false;
 
+  }
+
+  bool get spinning {
+    return _spinning;
   }
 
   ReelsModel get model {

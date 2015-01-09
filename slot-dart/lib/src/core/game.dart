@@ -5,18 +5,18 @@ import 'scene.dart';
 
 class Game extends Sprite {
 
-  ResourceManager _resourceManager;
+  ResourceManager _assets;
   Scene _scene;
   num _frameRate;
 
   Game() : super() {
     print('Game.Game');
-    _resourceManager = new ResourceManager();
+    _assets = new ResourceManager();
     onAddedToStage.listen(_onAddedToStage);
   }
 
-  ResourceManager get resourceManager {
-    return _resourceManager;
+  ResourceManager get assets {
+    return _assets;
   }
 
   Scene get scene {

@@ -17,7 +17,7 @@ class IconView extends View {
   }
 
   void _createIconImage() {
-    TextureAtlas textureAtlas = Engine.game.resourceManager.getTextureAtlas('atlas01');
+    TextureAtlas textureAtlas = Engine.game.assets.getTextureAtlas('atlas01');
     BitmapData bitmapData = textureAtlas.getBitmapData(
         textureAtlas.frames
           .where((f) => f.name.startsWith('icon'))

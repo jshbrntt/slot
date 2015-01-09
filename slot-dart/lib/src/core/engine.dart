@@ -26,7 +26,7 @@ class Engine {
 
       _renderLoop.addStage(_stage);
 
-      document.body.nodes.add(_canvas);
+      document.body.nodes.insert(0, _canvas);
 
 
     }

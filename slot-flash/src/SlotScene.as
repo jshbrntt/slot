@@ -14,6 +14,8 @@ package
     import models.ConfigModel;
     import models.ReelsModel;
 
+    import starling.core.Starling;
+
     import starling.display.Button;
     import starling.display.Image;
     import starling.display.Sprite;
@@ -105,6 +107,39 @@ package
             setupScore();
         }
 
+        private function setupReels():void
+        {
+            _reelsModel = new ReelsModel(_configModel.getReels());
+            _reelsView = new ReelsView(_reelsModel);
+            _reelsController = new ReelsController(_reelsModel, _reelsView);
+
+            addChild(_reelsView);
+        }
+
+        private function setupOverlay():void
+        {
+            _overlayImage = new Image(game.assets.getTexture("ui_overlay"));
+            _overlayImage.smoothing = TextureSmoothing.NONE;
+            _overlayImage.scaleX = _overlayImage.scaleY = 6;
+
+            addChild(_overlayImage);
+        }
+
+        private function setupButtons():void
+        {
+            var btnUpTexture:Texture = game.assets.getTexture("ui_spin_up");
+            var btnDownTexture:Texture = game.assets.getTexture("ui_spin_down");
+
+            _spinButton = new Button(btnUpTexture, "", btnDownTexture);
+            Image(Sprite(_spinButton.getChildAt(0)).getChildAt(0)).smoothing = TextureSmoothing.NONE;
+            _spinButton.scaleX = _spinButton.scaleY = 6;
+            _spinButton.x = 590;
+            _spinButton.y = 54;
+            _spinButton.addEventListener(Event.TRIGGERED, onSpinButtonTriggered);
+
+            addChild(_spinButton);
+        }
+
         private function setupScore():void
         {
             _currencyFormatter = new CurrencyFormatter("en-GB");
@@ -123,46 +158,13 @@ package
             addChild(_balanceField);
         }
 
-        private function setupOverlay():void
-        {
-            _overlayImage = new Image(game.assets.getTexture("ui_overlay"));
-            _overlayImage.smoothing = TextureSmoothing.NONE;
-            _overlayImage.scaleX = _overlayImage.scaleY = 6;
-
-            addChild(_overlayImage);
-        }
-
-        private function setupReels():void
-        {
-            _reelsModel = new ReelsModel(_configModel.getReels());
-            _reelsView = new ReelsView(_reelsModel);
-            _reelsController = new ReelsController(_reelsModel, _reelsView);
-
-            addChild(_reelsView);
-        }
-
-        private function setupButtons():void
-        {
-            var btnUpTexture:Texture = game.assets.getTexture("ui_spin_up");
-            var btnDownTexture:Texture = game.assets.getTexture("ui_spin_down");
-
-            _spinButton = new Button(btnUpTexture, "", btnDownTexture);
-            Image(Sprite(_spinButton.getChildAt(0)).getChildAt(0)).smoothing = TextureSmoothing.NONE;
-            _spinButton.scaleX = _spinButton.scaleY = 6;
-            _spinButton.x = 590;
-            _spinButton.y = 54;
-            _spinButton.addEventListener(Event.TRIGGERED, onSpinButtonTriggered);
-
-            addChild(_spinButton);
-        }
-
         private function onSpinButtonTriggered(event:Event = null):void
         {
             if (_spinButton.enabled)
             {
                 if (_reelsController.getSpinning())
                 {
-                    _reelsController.getStarting().addOnce(onReelsStopping);
+                    _reelsController.getStopping().addOnce(onReelsStopping);
                     _reelsController.stopSpin();
                 }
                 else

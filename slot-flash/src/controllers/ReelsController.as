@@ -4,6 +4,8 @@ package controllers
     import engine.mvc.Model;
     import engine.mvc.View;
 
+    import flash.display.SimpleButton;
+
     import flash.events.TimerEvent;
     import flash.utils.Timer;
 
