@@ -62,7 +62,7 @@ class ReelsController extends Controller {
       reelView.spin();
       _startReelIndex++;
 
-      if (_startTimer is Null || !_startTimer.isActive) {
+      if (_startTimer == null || !_startTimer.isActive) {
         _startTimer = new Timer.periodic(START_DURATION, _startNextReel);
 
       }
@@ -80,7 +80,7 @@ class ReelsController extends Controller {
 
     print("controllers.ReelsController._spinStarted");
 
-    if (_stopTimer is Null || !_stopTimer.isActive) {
+    if (_stopTimer == null || !_stopTimer.isActive) {
       _stopTimer = new Timer(STOP_DURATION, stopSpin);
     }
 
