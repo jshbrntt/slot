@@ -1,0 +1,31 @@
+{
+  "name": "slot",
+  "description": "Basic slot machine example.",
+  "main": "src/index.js",
+  "authors": [
+    "Joshua Barnett <jbacontrol@gmail.com>"
+  ],
+  "license": "WTFPL",
+  "keywords": [
+    "es5",
+    "gulp",
+    "browserify"
+  ],
+  "homepage": "https://github.com/synthecypher/slot",
+  "moduleType": [
+    "node"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "dist/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pixi.js": "~3.0.9",
+    "tock": "~1.0.9"
+  }
+}
