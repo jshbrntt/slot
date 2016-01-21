@@ -1,18 +1,10 @@
-library slot.slot_game;
+var Game = require('./core/game');
+var SlotScene = require('./slot_scene');
 
-import 'core/game.dart';
-import 'slot_scene.dart';
-
-class SlotGame extends Game {
-
-  SlotGame() : super() {
-    print('SlotGame.SlotGame');
-  }
-
-  void init() {
-    print('SlotGame.init');
-    super.init();
-    scene = new SlotScene(this);
-  }
-
+function SlotGame(renderer) {
+  Game.call(this, renderer);
+  this.scene = new SlotScene(this);
 }
+SlotGame.prototype = Object.create(Game.prototype);
+SlotGame.prototype.constructor = SlotGame;
+module.exports = SlotGame;

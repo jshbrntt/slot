@@ -1,20 +1,8 @@
-library slot.slot_engine;
+var Engine = require('./core/engine');
 
-import 'core/engine.dart';
-import 'slot_game.dart';
-
-class SlotEngine extends Engine {
-
-  static void init(SlotGame game) {
-
-    print('SlotEngine.init');
-
-    Engine.init(game, 800, 600);
-
-  }
-
-  static SlotGame get game {
-    return _game as SlotGame;
-  }
-
+function SlotEngine(gameClass, width, height) {
+  Engine.call(this, gameClass, width, height);
 }
+SlotEngine.prototype = Object.create(Engine.prototype);
+SlotEngine.prototype.constructor = SlotEngine;
+module.exports = SlotEngine;

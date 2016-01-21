@@ -1,30 +1,26 @@
-library slot.core.scene;
+var PIXI = require('pixi');
 
-import 'package:stagexl/stagexl.dart';
-import 'game.dart';
-
-class Scene extends Sprite {
-  Game game;
-
-  Scene(Game game) {
-    this.game = game;
-    onAddedToStage.listen(_onAddedToStage);
-  }
-
-  void _onAddedToStage(Event e) {
-    addResources();
-    _loadResources();
-  }
-
-  void _loadResources() {
-    print("Scene._loadResources");
-    game.assets.load()
-      .then((_) => init());
-  }
-
-  void addResources();
-  void init();
-  void update();
-  void dispose();
-
+function Scene(game) {
+  PIXI.Container.call(this);
+  this._game = game;
+  this._addResources();
+  this._loadResources();
 }
+Scene.prototype = Object.create(PIXI.Container.prototype);
+Scene.prototype.constructor = Scene;
+module.exports = Scene;
+
+Object.defineProperties(Scene.prototype, {
+  game: {
+    get: function() {
+      return this._game;
+    }
+  },
+});
+Scene.prototype._addResources = function() {};
+Scene.prototype._loadResources = function() {
+  this._game.loader.load(this._init.bind(this));
+};
+Scene.prototype._init = function() {};
+Scene.prototype.update = function() {};
+Scene.prototype.dispose = function() {};

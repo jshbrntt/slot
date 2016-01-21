@@ -1,49 +1,47 @@
-library slot.core.game;
+var PIXI = require('pixi');
 
-import 'package:stagexl/stagexl.dart';
-import 'scene.dart';
-
-class Game extends Sprite {
-
-  ResourceManager _assets;
-  Scene _scene;
-  num _frameRate;
-
-  Game() : super() {
-    print('Game.Game');
-    _assets = new ResourceManager();
-    onAddedToStage.listen(_onAddedToStage);
-  }
-
-  ResourceManager get assets {
-    return _assets;
-  }
-
-  Scene get scene {
-    return _scene;
-  }
-
-  set scene(Scene value) {
-    print('Game.set.scene');
-    if (_scene != null) {
-      removeChild(_scene);
-      _scene.dispose();
-      _scene = null;
-    }
-    _scene = value;
-    if (_scene != null) {
-      addChild(_scene);
-    }
-  }
-
-  void init() {
-    print('Game.init');
-    _frameRate = stage.frameRate;
-  }
-
-  void _onAddedToStage(Event e) {
-    print('Game._onAddedToStage');
-    init();
-  }
-
+function Game(renderer) {
+  PIXI.Container.call(this);
+  this._renderer = renderer;
+  this._loader = new PIXI.loaders.Loader();
+  this._scene = null;
 }
+Game.prototype = Object.create(PIXI.Container.prototype);
+Game.prototype.constructor = Game;
+module.exports = Game;
+
+Object.defineProperties(Game.prototype, {
+  loader: {
+    get: function() {
+      return this._loader;
+    }
+  },
+  scene: {
+    get: function() {
+      return this._scene;
+    },
+    set: function(value) {
+      if (!this._scene) {
+        this.removeChild(this._scene);
+        this._scene = null;
+      }
+      this._scene = value;
+      if (!this._scene) {
+        this.addChild(this._scene);
+      }
+    }
+  }
+});
+Game.prototype._animate = function() {
+  this._update();
+  this._render();
+  window.requestAnimationFrame(this._animate.bind(this));
+};
+Game.prototype._update = function() {
+  if (this._scene) {
+    this._scene.update();
+  }
+};
+Game.prototype._render = function() {
+  this._renderer.render(this);
+};
