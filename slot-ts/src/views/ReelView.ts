@@ -2,30 +2,26 @@ import View from '../engine/mvc/View';
 import IconModel from '../models/IconModel';
 import ReelModel from '../models/ReelModel';
 import Transitions from '../stubs/Transitions';
-import Tween from '../stubs/Tween';
 import IconView from './IconView';
-import Starling from '../stubs/Starling';
-import SlotGame from '../SlotGame';
+import { Easing, Tween } from '@tweenjs/tween.js';
 
 export default class ReelView extends View {
-  private _game: SlotGame;
-  private _iconsViews: IconView[] = [];
-  private _tweenCount: number = 0;
-  private _stopPosition: number = 0;
-  private _onStopped: Function | null = null;
+  private iconsViews: IconView[] = [];
+  private tweenCount: number = 0;
+  private stopPosition: number = 0;
+  public onStopped: Function | null = null;
 
   constructor(model: ReelModel) {
     super(model);
 
-    this._game = Starling.current.root as SlotGame;
-    this._iconsViews = [];
-    this._tweenCount = 0;
+    this.iconsViews = [];
+    this.tweenCount = 0;
 
     this.setupInitialIcons();
   }
 
   public stop(stopPosition: number): void {
-    this._stopPosition = this.getModel().getLoopingIndex(stopPosition);
+    this.stopPosition = this.getModel().getLoopingIndex(stopPosition);
   }
 
   public spin(): void {
@@ -34,8 +30,8 @@ export default class ReelView extends View {
 
   private shiftReel(): void {
     // Removing bottom out of view icon.
-    if (this._iconsViews) {
-      const iconView = this._iconsViews.pop();
+    if (this.iconsViews) {
+      const iconView = this.iconsViews.pop();
 
       if (iconView) {
         this.removeChild(iconView);
@@ -57,25 +53,25 @@ export default class ReelView extends View {
       );
       const newIconView: IconView = new IconView(newIconModel);
 
-      this._iconsViews.unshift(newIconView);
+      this.iconsViews.unshift(newIconView);
 
-      this._tweenCount = this._iconsViews.length - 1;
-      for (let i: number = 1; i < this._iconsViews.length; i++) {
-        const iconView: IconView = this._iconsViews[i];
-        const tween: Tween = new Tween(iconView, 0.1, Transitions.LINEAR);
+      this.tweenCount = this.iconsViews.length - 1;
+      for (let i: number = 1; i < this.iconsViews.length; i++) {
+        const iconView: IconView = this.iconsViews[i];
+        const tween: Tween = new Tween(iconView)
+          .to({y: iconView.y + iconView.height})
+          .easing(Easing.Linear.None);
         tween.onComplete = this.onShiftedReel;
-        tween.animate('y', iconView.y + iconView.height);
-        Starling.juggler.add(tween);
       }
       this.addChild(newIconView);
     }
   }
 
   private onShiftedReel(): void {
-    this._tweenCount--;
-    if (this._tweenCount === 0) {
+    this.tweenCount--;
+    if (this.tweenCount === 0) {
       // Stop spinning condition.
-      if (this.getModel().getPosition() === this._stopPosition) {
+      if (this.getModel().getPosition() === this.stopPosition) {
         this.stopReel();
       } else {
         this.shiftReel();
@@ -84,7 +80,7 @@ export default class ReelView extends View {
   }
 
   private stopReel(): void {
-    this._stopPosition = NaN;
+    this.stopPosition = NaN;
     if (this.onStopped) {
       this.onStopped.apply(this);
     }
@@ -97,13 +93,13 @@ export default class ReelView extends View {
       );
       this.addChild(iconView);
       iconView.y = (i + 2) * iconView.height;
-      this._iconsViews.push(iconView);
+      this.iconsViews.push(iconView);
     }
   }
 
   public getIconView(index: number): IconModel | null {
-    if (index < this._iconsViews.length) {
-      return this._iconsViews[index].getModel();
+    if (index < this.iconsViews.length) {
+      return this.iconsViews[index].getModel();
     }
     return null;
   }
@@ -113,14 +109,6 @@ export default class ReelView extends View {
   }
 
   getModel(): ReelModel {
-    return this._model as ReelModel;
-  }
-
-  get onStopped(): Function | null {
-    return this._onStopped;
-  }
-
-  set onStopped(value: Function | null) {
-    this._onStopped = value;
+    return this.model as ReelModel;
   }
 }

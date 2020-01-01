@@ -8,7 +8,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'openfl': path.resolve(__dirname, 'node_modules/openfl/lib/openfl')
+      'openfl': path.resolve(__dirname, 'node_modules/openfl')
     },
     extensions: [
       '.ts',

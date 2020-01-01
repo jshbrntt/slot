@@ -1,10 +1,11 @@
 import Game from './Game';
 import Newable from '../../utils/Newable';
+import Stage from 'openfl/lib/openfl/display/Stage';
 
 export default class Engine {
-  protected game: Game;
+  public stage: Stage;
 
   public constructor(protected GameClass: Newable<Game>) {
-    this.game = new GameClass();
+    this.stage = new Stage(800, 600, 0xffffff, GameClass);
   }
 }

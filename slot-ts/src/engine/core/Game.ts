@@ -1,9 +1,9 @@
-import AssetLibrary from 'openfl/utils/AssetLibrary';
-import AssetManifest from 'openfl/utils/AssetManifest';
-import Assets from 'openfl/utils/Assets';
-import Sprite from 'openfl/display/Sprite';
-
+import AssetLibrary from 'openfl/lib/openfl/utils/AssetLibrary';
+import AssetManifest from 'openfl/lib/openfl/utils/AssetManifest';
+import Assets from 'openfl/lib/openfl/utils/Assets';
+import Sprite from 'openfl/lib/openfl/display/Sprite';
 import Scene from './Scene';
+import TWEEN from '@tweenjs/tween.js';
 
 export default class Game extends Sprite {
   public constructor(
@@ -41,6 +41,7 @@ export default class Game extends Sprite {
     }
     if (this.scene) {
       this.scene.update();
+      TWEEN.update(this.totalTime);
     }
   }
 

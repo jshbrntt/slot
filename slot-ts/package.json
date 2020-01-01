@@ -19,5 +19,8 @@
     "start": "npm run start:dev",
     "start:dev": "webpack-dev-server --open --config webpack.dev.js",
     "start:prod": "webpack-dev-server --open --config webpack.prod.js"
+  },
+  "dependencies": {
+    "@tweenjs/tween.js": "^18.5.0"
   }
 }

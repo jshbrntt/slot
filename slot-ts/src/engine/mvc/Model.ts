@@ -1,5 +1,3 @@
-import EventDispatcher from 'openfl/events/EventDispatcher';
-
-export default class Model extends EventDispatcher {
+export default class Model extends EventTarget {
   static UPDATED = 'Model.UPDATED';
 }

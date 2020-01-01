@@ -5,13 +5,11 @@ import ReelsModel from '../models/ReelsModel';
 import ReelView from './ReelView';
 
 export default class ReelsView extends View {
-  private _reelViews: ReelView[];
+  private reelViews: ReelView[];
 
   constructor(model: Model) {
     super(model);
-
-    this._reelViews = [];
-
+    this.reelViews = [];
     this.createReelViews();
   }
 
@@ -25,15 +23,15 @@ export default class ReelsView extends View {
       reelView.y = -130;
       this.addChild(reelView);
 
-      this._reelViews.push(reelView);
+      this.reelViews.push(reelView);
     }
   }
 
   public getReelViews(): ReelView[] {
-    return this._reelViews;
+    return this.reelViews;
   }
 
   public getModel(): ReelsModel {
-    return this._model as ReelsModel;
+    return this.model as ReelsModel;
   }
 }
