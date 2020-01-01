@@ -1,4 +1,4 @@
-export class EnterFrameEvent extends Event {
+export default class EnterFrameEvent extends Event {
     static ROOT_CREATED = 'ROOT_CREATED';
     constructor(
         type: string,

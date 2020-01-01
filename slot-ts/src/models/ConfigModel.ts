@@ -1,7 +1,7 @@
-import { Model } from '../engine/mvc/Model';
-import { XML } from '../stubs/XML';
+import Model from '../engine/mvc/Model';
+import XML from '../stubs/XML';
 
-export class ConfigModel extends Model {
+export default class ConfigModel extends Model {
   private _xml: XML;
   private _reels: number[][];
   private _prizes: { [key: string]: number };

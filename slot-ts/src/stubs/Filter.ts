@@ -1,1 +1,1 @@
-export class Filter {}
+export default class Filter {}

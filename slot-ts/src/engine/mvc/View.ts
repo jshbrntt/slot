@@ -1,21 +1,11 @@
-import { DisplayObjectContainer } from '../../stubs/DisplayObjectContainer';
+import Model from '../mvc/Model';
+import Sprite from 'openfl/display/Sprite';
 
-import { Model } from '../mvc/Model';
-
-export abstract class View extends DisplayObjectContainer {
-  protected _model: Model;
-  constructor(model: Model) {
+export default abstract class View extends Sprite {
+  constructor(protected model: Model) {
     super();
-    this._model = model;
-    if (!this._model) {
-      throw new Error('Cannot create view from null Model');
-    }
-    if (this._model.updated) {
-      this._model.updated.add(this.onUpdated);
-    }
+    this.addEventListener(Model.UPDATED, this.onUpdated);
   }
 
-  protected onUpdated(): void {
-    // abstract
-  }
+  protected onUpdated(): void {}
 }

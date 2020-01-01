@@ -1,4 +1,4 @@
-export class Timer extends EventTarget {
+export default class Timer extends EventTarget {
   public running: boolean = false;
   constructor(delay: Number, repeatCount: number) {
     super();

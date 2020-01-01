@@ -1,3 +1,3 @@
-import { StubImage } from './StubImage';
+import StubImage from './StubImage';
 
-export class Texture extends StubImage {}
+export default class Texture extends StubImage {}

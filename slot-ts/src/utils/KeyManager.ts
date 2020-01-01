@@ -1,37 +1,22 @@
-import { Stage } from '../stubs/Stage';
-import { NativeSignal } from '../stubs/NativeSignal';
-
-export class KeyManager {
+export default class KeyManager {
   static _initialized: boolean = false;
-  static _stage: Stage | null;
+  static _document: Document | null;
   static _keys: { [keyCode: string]: boolean } | null;
   static _pressedFunctions: { [keyCode: string]: Function[] } | null;
   static _releasedFunctions: { [keyCode: string]: Function[] } | null;
-  static _pressedSignal: NativeSignal | null;
-  static _releasedSignal: NativeSignal | null;
 
-  static initialize(stage: Stage): void {
+  static initialize(document: Document): void {
     if (KeyManager._initialized) {
       return;
     }
     KeyManager._initialized = true;
-    KeyManager._stage = stage;
+    KeyManager._document = document;
     KeyManager._keys = {};
     KeyManager._pressedFunctions = {};
     KeyManager._releasedFunctions = {};
-    KeyManager._pressedSignal = new NativeSignal(
-      KeyManager._stage,
-      'keydown',
-      KeyboardEvent
-    );
-    KeyManager._releasedSignal = new NativeSignal(
-      KeyManager._stage,
-      'keyup',
-      KeyboardEvent
-    );
 
-    KeyManager._pressedSignal.add(KeyManager.onKeyDown);
-    KeyManager._releasedSignal.add(KeyManager.onKeyUp);
+    KeyManager._document.addEventListener('keydown', KeyManager.onKeyDown);
+    KeyManager._document.addEventListener('keyup', KeyManager.onKeyUp);
   }
 
   static onKeyDown(event: KeyboardEvent): void {
@@ -40,6 +25,8 @@ export class KeyManager {
       KeyManager._keys[event.keyCode] = false;
       if (!KeyManager._keys[event.keyCode]) {
         KeyManager._keys[event.keyCode] = true;
+        KeyManager._pressedFunctions[event.keyCode] =
+          KeyManager._pressedFunctions[event.keyCode] || [];
         for (const pressedFunction of KeyManager._pressedFunctions[
           event.keyCode
         ]) {
@@ -59,6 +46,8 @@ export class KeyManager {
         KeyManager._keys[event.keyCode] = true;
       } else {
         KeyManager._keys[event.keyCode] = false;
+        KeyManager._releasedFunctions[event.keyCode] =
+          KeyManager._releasedFunctions[event.keyCode] || [];
         for (const releasedFunction of KeyManager._releasedFunctions[
           event.keyCode
         ]) {
@@ -117,18 +106,14 @@ export class KeyManager {
   }
 
   static dispose(): void {
+    if (KeyManager._document) {
+      KeyManager._document.removeEventListener('keydown', KeyManager.onKeyDown);
+      KeyManager._document.removeEventListener('keyup', KeyManager.onKeyUp);
+    }
     KeyManager._initialized = false;
-    KeyManager._stage = null;
+    KeyManager._document = null;
     KeyManager._keys = null;
     KeyManager._pressedFunctions = null;
     KeyManager._releasedFunctions = null;
-    if (KeyManager._pressedSignal) {
-      KeyManager._pressedSignal.removeAll();
-    }
-    if (KeyManager._releasedSignal) {
-      KeyManager._releasedSignal.removeAll();
-    }
-    KeyManager._pressedSignal = null;
-    KeyManager._releasedSignal = null;
   }
 }

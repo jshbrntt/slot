@@ -1,11 +1,11 @@
-import { Texture } from './Texture';
+import Texture from './Texture';
 
 export type AssetManifest = { [key: string]: any };
 export type Asset = Texture | TextureAtlas | Font;
 export type Font = string;
 export type Assets = { [key: string]: Asset };
 
-export class TextureAtlas {
+export default class TextureAtlas {
   public _textures: Texture[] = [];
   public getTextures(partialKey: string): Texture[] {
     return Object.entries(this._textures)
@@ -14,14 +14,14 @@ export class TextureAtlas {
   }
 }
 
-export class AssetManager {
+export default class AssetManager {
   public _assets: Assets = {};
   public verbose: boolean = false;
   public enqueue(manifest: AssetManifest): void {
     console.log('TODO: Load assets from provided manifest');
   }
   public loadQueue(onLoaded: Function): void {
-    onLoaded();
+    onLoaded(1);
   }
   public getAsset(key: string): Asset {
     return this._assets[key];

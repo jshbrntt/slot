@@ -1,3 +1,3 @@
-export class TextureSmoothing {
+export default class TextureSmoothing {
   static NONE = 'NONE';
 }

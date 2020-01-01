@@ -1,37 +1,22 @@
-import { Sprite } from '../../stubs/Sprite';
-import { StubEvent } from '../../stubs/StubEvent';
-import { Game } from './Game';
+import Sprite from 'openfl/display/Sprite';
+import Event from 'openfl/events/Event';
 
-export class Scene extends Sprite {
-  private _game: Game | null = null;
-  constructor(game: Game) {
+import Game from './Game';
+
+export default class Scene extends Sprite {
+  constructor(protected game: Game) {
     super();
-    this._game = game;
-    this.addEventListener(StubEvent.ADDED_TO_STAGE, this.onAdded);
+    this.addEventListener(Event.ADDED_TO_STAGE, this.onAdded);
   }
 
   private onAdded(): void {
-    removeEventListener(StubEvent.ADDED_TO_STAGE, this.onAdded);
+    this.removeEventListener(Event.ADDED_TO_STAGE, this.onAdded);
     this.init();
   }
 
-  protected init(): void {
-    // abstract
-  }
+  protected init(): void {}
 
-  public update(): void {
-    // abstract
-  }
+  public update(): void {}
 
-  protected get game(): Game {
-    if (this._game) {
-      return this._game;
-    }
-    throw new Error('Missing game reference');
-  }
-
-  public dispose(): void {
-    this._game = null;
-    super.dispose();
-  }
+  public dispose(): void {}
 }

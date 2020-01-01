@@ -1,8 +1,8 @@
-import { IconModel } from '../models/IconModel';
-import { ReelModel } from '../models/ReelModel';
-import { Model } from '../engine/mvc/Model';
+import IconModel from '../models/IconModel';
+import ReelModel from '../models/ReelModel';
+import Model from '../engine/mvc/Model';
 
-export class ReelsModel extends Model {
+export default class ReelsModel extends Model {
     private _reelsConfig: number[][];
     private _reelModels: ReelModel[];
 

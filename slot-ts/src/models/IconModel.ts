@@ -1,6 +1,6 @@
-import { Model } from '../engine/mvc/Model';
+import Model from '../engine/mvc/Model';
 
-export class IconModel extends Model {
+export default class IconModel extends Model {
   private _id: number;
 
   constructor(id: number) {

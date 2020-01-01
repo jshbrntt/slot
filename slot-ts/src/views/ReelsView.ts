@@ -1,10 +1,10 @@
-import { Model } from '../engine/mvc/Model';
-import { View } from '../engine/mvc/View';
-import { ReelModel } from '../models/ReelModel';
-import { ReelsModel } from '../models/ReelsModel';
-import { ReelView } from './ReelView';
+import Model from '../engine/mvc/Model';
+import View from '../engine/mvc/View';
+import ReelModel from '../models/ReelModel';
+import ReelsModel from '../models/ReelsModel';
+import ReelView from './ReelView';
 
-export class ReelsView extends View {
+export default class ReelsView extends View {
   private _reelViews: ReelView[];
 
   constructor(model: Model) {

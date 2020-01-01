@@ -1,88 +1,55 @@
-import { Scene } from './engine/core/Scene';
-import { ConfigModel } from './models/ConfigModel';
-import { ReelsModel } from './models/ReelsModel';
-import { ReelsView } from './views/ReelsView';
-import { ReelsController } from './controllers/ReelsController';
-import { SlotGame } from './SlotGame';
-import { KeyManager } from './utils/KeyManager';
-import { Key } from './utils/Key';
-import { XML } from './stubs/XML';
-import { StubEvent } from './stubs/StubEvent';
-import { BlurFilter } from './stubs/BlurFilter';
-import { Color } from './stubs/Color';
-import { TextField } from './stubs/TextField';
-import { TextureSmoothing } from './stubs/TextureSmoothing';
-import { Button } from './stubs/Button';
-import { Texture } from './stubs/Texture';
-import { StubImage } from './stubs/StubImage';
+import Scene from './engine/core/Scene';
+import ConfigModel from './models/ConfigModel';
+import ReelsModel from './models/ReelsModel';
+import ReelsView from './views/ReelsView';
+import ReelsController from './controllers/ReelsController';
+import KeyManager from './utils/KeyManager';
+import XML from './stubs/XML';
+import StubEvent from './stubs/StubEvent';
+import BlurFilter from './stubs/BlurFilter';
+import Color from './stubs/Color';
+import TextField from 'openfl/text/TextField';
+import TextureSmoothing from './stubs/TextureSmoothing';
+import Button from './stubs/Button';
+import Texture from './stubs/Texture';
+import StubImage from './stubs/StubImage';
+import Keyboard from 'openfl/ui/Keyboard';
+import TextFormat from 'openfl/lib/openfl/text/TextFormat';
+import Assets from 'openfl/lib/openfl/utils/Assets';
 
-export class SlotScene extends Scene {
-  private _loader: XMLHttpRequest | null = null;
-  private _configModel: ConfigModel | null = null;
-
-  private _reelsModel: ReelsModel | null = null;
-  private _reelsView: ReelsView | null = null;
-  private _reelsController: ReelsController | null = null;
-
-  private _overlayImage: StubImage | null = null;
-  private _spinButton: Button | null = null;
-
-  private _balanceField: TextField | null = null;
-  private _balance: number | null = null;
-  private _errorField: TextField | null = null;
-
-  constructor(game: SlotGame) {
-    super(game);
-  }
+export default class SlotScene extends Scene {
+  private loader: XMLHttpRequest | null = null;
+  private configModel: ConfigModel | null = null;
+  private reelsModel: ReelsModel | null = null;
+  private reelsView: ReelsView | null = null;
+  private reelsController: ReelsController | null = null;
+  private overlayImage: StubImage | null = null;
+  private spinButton: Button | null = null;
+  private balanceField: TextField | null = null;
+  private balance: number | null = null;
+  private errorField: TextField | null = null;
+  private config: object;
 
   protected init(): void {
     super.init();
-
-    this.loadConfig('./config.xml');
-
-    KeyManager.pressed(Key.SPACE, this.onSpinButtonTriggered);
-  }
-
-  private loadConfig(url: string): void {
-    this._loader = new XMLHttpRequest();
-    this._loader.onload = event => this.onLoaderComplete(event);
-    this._loader.onerror = event => this.onLoaderError(event);
-
-    try {
-      this._loader.open('GET', url);
-    } catch (error) {
-      this.displayError('A SecurityError has occurred.');
-    }
+    this.config = JSON.parse(Assets.getText('config.json'));
+    KeyManager.pressed(Keyboard.SPACE, this.onSpinButtonTriggered);
   }
 
   private displayError(text: string): void {
-    this._errorField = new TextField(
-      window.stage.stageWidth,
-      window.stage.stageHeight,
-      text
-    );
-
-    if (this._errorField) {
-      this._errorField.fontName = 'Minecraftia';
-      this._errorField.autoScale = true;
-      this._errorField.fontSize = 32;
-      this._errorField.color = Color.RED;
-      this._errorField.bold = true;
-
-      this.addChild(this._errorField);
-    }
-  }
-
-  private onLoaderError(event: StubEvent): void {
-    this.displayError(
-      'Failed to load configuration.\nCopy\n/config-template/config.template.xml\nto\n/bin/config.xml'
-    );
+    this.errorField = new TextField();
+    this.errorField.width = 800;
+    this.errorField.height = 600;
+    this.errorField.text = text;
+    this.errorField.embedFonts = true;
+    this.errorField.setTextFormat(new TextFormat('Minecraftia', 32, 0xFF0000, true));
+    this.addChild(this.errorField);
   }
 
   private onLoaderComplete(event: Event): void {
-    if (this._loader) {
-      const xml: XML = new XML(this._loader.response);
-      this._configModel = new ConfigModel(xml);
+    if (this.loader) {
+      const xml: XML = new XML(this.loader.response);
+      this.configModel = new ConfigModel(xml);
 
       this.setupReels();
       this.setupOverlay();
@@ -92,49 +59,49 @@ export class SlotScene extends Scene {
   }
 
   private setupReels(): void {
-    if (this._configModel) {
-      this._reelsModel = new ReelsModel(this._configModel.getReels());
-      this._reelsView = new ReelsView(this._reelsModel);
-      this._reelsController = new ReelsController(
-        this._reelsModel,
-        this._reelsView
+    if (this.configModel) {
+      this.reelsModel = new ReelsModel(this.configModel.getReels());
+      this.reelsView = new ReelsView(this.reelsModel);
+      this.reelsController = new ReelsController(
+        this.reelsModel,
+        this.reelsView
       );
 
-      this.addChild(this._reelsView);
+      this.addChild(this.reelsView);
     }
   }
 
   private setupOverlay(): void {
-    this._overlayImage = new StubImage(
+    this.overlayImage = new StubImage(
       this.game.assets.getTexture('ui_overlay')
     );
-    if (this._overlayImage) {
-      this._overlayImage.smoothing = TextureSmoothing.NONE;
-      this._overlayImage.scaleX = this._overlayImage.scaleY = 6;
+    if (this.overlayImage) {
+      this.overlayImage.smoothing = TextureSmoothing.NONE;
+      this.overlayImage.scaleX = this.overlayImage.scaleY = 6;
     }
 
-    this.addChild(this._overlayImage);
+    this.addChild(this.overlayImage);
   }
 
   private setupButtons(): void {
     const btnUpTexture: Texture = this.game.assets.getTexture('ui_spin_up');
     const btnDownTexture: Texture = this.game.assets.getTexture('ui_spin_down');
 
-    this._spinButton = new Button(btnUpTexture, '', btnDownTexture);
-    const outer = this._spinButton.getChildAt(0);
+    this.spinButton = new Button(btnUpTexture, '', btnDownTexture);
+    const outer = this.spinButton.getChildAt(0);
     if (outer) {
       const inner = outer.getChildAt(0) as StubImage;
       if (inner) {
         inner.smoothing = TextureSmoothing.NONE;
-        this._spinButton.scaleX = this._spinButton.scaleY = 6;
-        this._spinButton.x = 590;
-        this._spinButton.y = 54;
-        this._spinButton.addEventListener(
+        this.spinButton.scaleX = this.spinButton.scaleY = 6;
+        this.spinButton.x = 590;
+        this.spinButton.y = 54;
+        this.spinButton.addEventListener(
           StubEvent.TRIGGERED,
           this.onSpinButtonTriggered
         );
 
-        this.addChild(this._spinButton);
+        this.addChild(this.spinButton);
       }
     }
   }
@@ -144,9 +111,9 @@ export class SlotScene extends Scene {
     // this._currencyFormatter.setCurrency('GBP', '£');
     // this._currencyFormatter.trailingZeros = true;
 
-    this._balance = 0;
+    this.balance = 0;
 
-    this._balanceField = new TextField(
+    this.balanceField = new TextField(
       170,
       100,
       'BALANCE:\n' + this.getBalanceFormatted(),
@@ -154,31 +121,31 @@ export class SlotScene extends Scene {
       40,
       Color.RED
     );
-    this._balanceField.bold = true;
-    this._balanceField.autoScale = true;
-    this._balanceField.x = 604;
-    this._balanceField.y = 214;
-    this._balanceField.filter = BlurFilter.createDropShadow(6, 0.785, 0, 1, 0);
+    this.balanceField.bold = true;
+    this.balanceField.autoScale = true;
+    this.balanceField.x = 604;
+    this.balanceField.y = 214;
+    this.balanceField.filter = BlurFilter.createDropShadow(6, 0.785, 0, 1, 0);
 
-    this.addChild(this._balanceField);
+    this.addChild(this.balanceField);
   }
 
   private onSpinButtonTriggered(event: Event | null = null): void {
-    if (this._spinButton && this._reelsController) {
-      if (this._spinButton.enabled) {
-        if (this._reelsController.getSpinning()) {
-          this._reelsController.getStopping().addOnce(this.onReelsStopping);
-          this._reelsController.stopSpin();
+    if (this.spinButton && this.reelsController) {
+      if (this.spinButton.enabled) {
+        if (this.reelsController.getSpinning()) {
+          this.reelsController.getStopping().addOnce(this.onReelsStopping);
+          this.reelsController.stopSpin();
         } else {
-          this._reelsController.getStarting().addOnce(this.onReelsStarting);
-          this._reelsController.startSpin();
+          this.reelsController.getStarting().addOnce(this.onReelsStarting);
+          this.reelsController.startSpin();
         }
       }
     }
   }
 
   private getBalanceFormatted(): string {
-    const balance = this._balance || 0;
+    const balance = this.balance || 0;
     return balance.toLocaleString(window.navigator.language, {
       style: 'currency',
       currency: 'GBP'
@@ -186,40 +153,40 @@ export class SlotScene extends Scene {
   }
 
   private onReelsStarting(): void {
-    if (this._reelsController && this._spinButton) {
-      this._reelsController.getStarted().addOnce(this.onReelsStarted);
-      this._spinButton.enabled = false;
+    if (this.reelsController && this.spinButton) {
+      this.reelsController.getStarted().addOnce(this.onReelsStarted);
+      this.spinButton.enabled = false;
     }
   }
 
   private onReelsStarted(): void {
-    if (this._reelsController && this._spinButton) {
-      this._reelsController.getStopping().addOnce(this.onReelsStopping);
-      this._spinButton.enabled = true;
+    if (this.reelsController && this.spinButton) {
+      this.reelsController.getStopping().addOnce(this.onReelsStopping);
+      this.spinButton.enabled = true;
     }
   }
 
   private onReelsStopping(): void {
-    if (this._reelsController && this._spinButton) {
-      this._reelsController.getStopped().addOnce(this.onReelsStopped);
-      this._spinButton.enabled = false;
+    if (this.reelsController && this.spinButton) {
+      this.reelsController.getStopped().addOnce(this.onReelsStopped);
+      this.spinButton.enabled = false;
     }
   }
 
   private onReelsStopped(spinResult: string): void {
     if (
-      this._configModel &&
-      this._reelsController &&
-      this._spinButton &&
-      this._balance &&
-      this._balanceField
+      this.configModel &&
+      this.reelsController &&
+      this.spinButton &&
+      this.balance &&
+      this.balanceField
     ) {
-      this._spinButton.enabled = true;
+      this.spinButton.enabled = true;
 
-      if (this._configModel.getPrizes()[spinResult]) {
-        const prize: number = this._configModel.getPrizes()[spinResult];
-        this._balance += prize;
-        this._balanceField.text = 'BALANCE:\n' + this.getBalanceFormatted();
+      if (this.configModel.getPrizes()[spinResult]) {
+        const prize: number = this.configModel.getPrizes()[spinResult];
+        this.balance += prize;
+        this.balanceField.text = 'BALANCE:\n' + this.getBalanceFormatted();
       }
     }
   }

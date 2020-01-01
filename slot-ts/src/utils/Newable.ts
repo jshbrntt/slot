@@ -1,1 +1,2 @@
-export type Newable<T> = { new (...args: any[]): T; };
+type Newable<T> = { new (...args: any[]): T; };
+export default Newable;

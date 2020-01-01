@@ -1,13 +1,13 @@
-import { View } from '../engine/mvc/View';
-import { IconModel } from '../models/IconModel';
-import { ReelModel } from '../models/ReelModel';
-import { Transitions } from '../stubs/Transitions';
-import { Tween } from '../stubs/Tween';
-import { IconView } from './IconView';
-import { Starling } from '../stubs/Starling';
-import { SlotGame } from '../SlotGame';
+import View from '../engine/mvc/View';
+import IconModel from '../models/IconModel';
+import ReelModel from '../models/ReelModel';
+import Transitions from '../stubs/Transitions';
+import Tween from '../stubs/Tween';
+import IconView from './IconView';
+import Starling from '../stubs/Starling';
+import SlotGame from '../SlotGame';
 
-export class ReelView extends View {
+export default class ReelView extends View {
   private _game: SlotGame;
   private _iconsViews: IconView[] = [];
   private _tweenCount: number = 0;

@@ -1,8 +1,8 @@
-import { Signal } from '../stubs/Signal';
-import { Model } from '../engine/mvc/Model';
-import { IconModel } from './IconModel';
+import Signal from '../stubs/Signal';
+import Model from '../engine/mvc/Model';
+import IconModel from './IconModel';
 
-export class ReelModel extends Model {
+export default class ReelModel extends Model {
     private _iconModels: IconModel[];
     private _spinning: Signal;
     private _position: number;

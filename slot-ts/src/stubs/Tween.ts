@@ -1,6 +1,6 @@
-import { DisplayObjectContainer } from './DisplayObjectContainer';
+import DisplayObjectContainer from './DisplayObjectContainer';
 
-export class Tween {
+export default class Tween {
   public onComplete: Function | null = null;
   constructor(
     public child: DisplayObjectContainer,

@@ -1,6 +1,6 @@
-import { Filter } from './Filter';
+import Filter from './Filter';
 
-export class BlurFilter {
+export default class BlurFilter {
   static createDropShadow(
     blurX: number,
     blurY: number,

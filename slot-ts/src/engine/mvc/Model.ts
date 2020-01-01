@@ -1,8 +1,5 @@
-import { Signal } from '../../stubs/Signal';
+import EventDispatcher from 'openfl/events/EventDispatcher';
 
-export class Model {
-  protected _updated: Signal = new Signal();
-  get updated(): Signal {
-    return this._updated;
-  }
+export default class Model extends EventDispatcher {
+  static UPDATED = 'Model.UPDATED';
 }

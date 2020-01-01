@@ -1,5 +1,5 @@
-import { DisplayObjectContainer } from './DisplayObjectContainer';
+import DisplayObjectContainer from './DisplayObjectContainer';
 
-export class Sprite extends DisplayObjectContainer {
+export default class Sprite extends DisplayObjectContainer {
   public dispose() {}
 }

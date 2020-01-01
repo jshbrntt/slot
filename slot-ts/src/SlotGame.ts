@@ -1,14 +1,16 @@
-import { Game } from './engine/core/Game';
-import { SlotAssets } from './SlotAssets';
-import { SlotScene } from './SlotScene';
+import Game from './engine/core/Game';
+import SlotAssetManifest from './SlotAssetManifest';
+import SlotScene from './SlotScene';
+import Scene from './engine/core/Scene';
 
-export class SlotGame extends Game {
-  constructor() {
-    super(SlotAssets);
+export default class SlotGame extends Game {
+  public constructor() {
+    super(new SlotAssetManifest());
   }
 
   protected init(): void {
     super.init();
-    this.scene = new SlotScene(this);
+    const scene = new SlotScene(this as Game);
+    this.setScene(scene as Scene);
   }
 }

@@ -1,4 +1,4 @@
-export class XML extends String {
+export default class XML extends String {
   public prizes: XML | null = null;
   public reels: XML | null = null;
   constructor(

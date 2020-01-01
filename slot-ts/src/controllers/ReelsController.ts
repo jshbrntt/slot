@@ -1,19 +1,18 @@
-import { Controller } from '../engine/mvc/Controller';
-import { Model } from '../engine/mvc/Model';
-import { View } from '../engine/mvc/View';
+import Controller from '../engine/mvc/Controller';
+import Model from '../engine/mvc/Model';
+import View from '../engine/mvc/View';
 
-import { SimpleButton } from '../stubs/SimpleButton';
-import { TimerEvent } from '../stubs/TimerEvent';
-import { Timer } from '../stubs/Timer';
-import { Signal } from '../stubs/Signal';
+import TimerEvent from '../stubs/TimerEvent';
+import Timer from '../stubs/Timer';
+import Signal from '../stubs/Signal';
 
-import { IconModel } from '../models/IconModel';
-import { ReelsModel } from '../models/ReelsModel';
+import IconModel from '../models/IconModel';
+import ReelsModel from '../models/ReelsModel';
 
-import { ReelView } from '../views/ReelView';
-import { ReelsView } from '../views/ReelsView';
+import ReelView from '../views/ReelView';
+import ReelsView from '../views/ReelsView';
 
-export class ReelsController extends Controller {
+export default class ReelsController extends Controller {
   private _startTimer: Timer;
   private _stopTimer: Timer;
 

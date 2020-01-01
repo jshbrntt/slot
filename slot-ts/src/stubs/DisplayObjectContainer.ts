@@ -1,4 +1,6 @@
-export class DisplayObjectContainer extends EventTarget {
+import StubEvent from "./StubEvent";
+
+export default class DisplayObjectContainer extends EventTarget {
   public parent: DisplayObjectContainer | null = null;
   public scaleX: number = 1;
   public scaleY: number = 1;
@@ -10,6 +12,7 @@ export class DisplayObjectContainer extends EventTarget {
   public addChild(child: DisplayObjectContainer): void {
     this.children.push(child);
     child.parent = this;
+    child.dispatchEvent(new StubEvent(StubEvent.ADDED_TO_STAGE));
   }
   public removeChild(child: DisplayObjectContainer): void {
     const childIndex: number = this.children.indexOf(child);

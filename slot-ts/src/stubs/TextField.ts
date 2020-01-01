@@ -1,7 +1,7 @@
-import { DisplayObjectContainer } from './DisplayObjectContainer';
-import { Filter } from './Filter';
+import DisplayObjectContainer from './DisplayObjectContainer';
+import Filter from './Filter';
 
-export class TextField extends DisplayObjectContainer {
+export default class TextField extends DisplayObjectContainer {
   public bold: boolean = false;
   public autoScale: boolean = false;
   public filter: Filter | null = null;

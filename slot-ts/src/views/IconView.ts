@@ -1,13 +1,13 @@
-import { Model } from '../engine/mvc/Model';
-import { View } from '../engine/mvc/View';
-import { IconModel } from '../models/IconModel';
-import { Starling } from '../stubs/Starling';
-import { StubImage } from '../stubs/StubImage';
-import { Texture } from '../stubs/Texture';
-import { TextureSmoothing } from '../stubs/TextureSmoothing';
-import { SlotGame } from '../SlotGame';
+import Model from '../engine/mvc/Model';
+import View from '../engine/mvc/View';
+import IconModel from '../models/IconModel';
+import Starling from '../stubs/Starling';
+import StubImage from '../stubs/StubImage';
+import Texture from '../stubs/Texture';
+import TextureSmoothing from '../stubs/TextureSmoothing';
+import SlotGame from '../SlotGame';
 
-export class IconView extends View {
+export default class IconView extends View {
   private _iconImage: StubImage | null = null;
 
   constructor(model: Model) {
