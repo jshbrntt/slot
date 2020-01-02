@@ -1,7 +1,6 @@
 import View from '../engine/mvc/View';
 import IconModel from '../models/IconModel';
 import ReelModel from '../models/ReelModel';
-import Transitions from '../stubs/Transitions';
 import IconView from './IconView';
 import { Easing, Tween } from '@tweenjs/tween.js';
 

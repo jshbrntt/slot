@@ -4,7 +4,6 @@ import BitmapData from 'openfl/display/BitmapData';
 import Matrix from 'openfl/geom/Matrix';
 import Rectangle from 'openfl/geom/Rectangle';
 import Bitmap from 'openfl/display/Bitmap';
-import Point from 'openfl/geom/Point';
 
 export default class SlotAssets extends AssetManifest {
   private static BITMAPS: { [name: string]: Bitmap } = {};
@@ -30,7 +29,6 @@ export default class SlotAssets extends AssetManifest {
     this.addBitmapData('assets/atlas01.png', 'atlas01.png');
     this.addText('assets/atlas01.xml', 'atlas01.xml');
     this.addText('assets/config.json', 'config.json');
-    this.addFont('assets/fonts/minecraftia.ttf', 'minecraftia.ttf');
   }
   public unpack(): void {
     const atlasBitmap: BitmapData = Assets.getBitmapData('atlas01.png');
@@ -48,7 +46,7 @@ export default class SlotAssets extends AssetManifest {
       const subTextureBitmapData = new BitmapData(width, height, true, 0);
       const matrix = new Matrix();
       matrix.translate(-x, -y);
-      subTextureBitmapData.draw(atlasBitmap, matrix, null, null, new Rectangle(0, 0, width, height), false);
+      subTextureBitmapData.draw(atlasBitmap, matrix, null, null, new Rectangle(x, y, width, height), false);
       const subTextureBitmap = new Bitmap(subTextureBitmapData);
       SlotAssets.setBitmap(name, subTextureBitmap);
     }
