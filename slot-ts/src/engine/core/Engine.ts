@@ -1,6 +1,6 @@
 import Game from './Game';
 import Newable from '../../utils/Newable';
-import Stage from 'openfl/lib/openfl/display/Stage';
+import Stage from 'openfl/display/Stage';
 
 export default class Engine {
   public stage: Stage;

@@ -1,6 +1,6 @@
 import Engine from './engine/core/Engine';
 import SlotGame from './SlotGame';
-import Stage from 'openfl/lib/openfl/display/Stage';
+import Stage from 'openfl/display/Stage';
 
 export default class SlotEngine extends Engine {
   public constructor() {

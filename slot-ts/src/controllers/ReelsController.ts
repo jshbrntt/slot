@@ -2,8 +2,8 @@ import Controller from '../engine/mvc/Controller';
 import Model from '../engine/mvc/Model';
 import View from '../engine/mvc/View';
 
-import Timer from 'openfl/lib/openfl/utils/Timer';
-import TimerEvent from 'openfl/lib/openfl/events/TimerEvent';
+import Timer from 'openfl/utils/Timer';
+import TimerEvent from 'openfl/events/TimerEvent';
 
 import IconModel from '../models/IconModel';
 import ReelsModel from '../models/ReelsModel';

@@ -1,5 +1,5 @@
-import Sprite from 'openfl/lib/openfl/display/Sprite';
-import Event from 'openfl/lib/openfl/events/Event';
+import Sprite from 'openfl/display/Sprite';
+import Event from 'openfl/events/Event';
 
 import Game from './Game';
 

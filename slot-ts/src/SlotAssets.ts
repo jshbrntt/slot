@@ -1,10 +1,10 @@
-import AssetManifest from 'openfl/lib/openfl/utils/AssetManifest';
-import Assets from 'openfl/lib/openfl/utils/Assets';
-import BitmapData from 'openfl/lib/openfl/display/BitmapData';
-import Matrix from 'openfl/lib/openfl/geom/Matrix';
-import Rectangle from 'openfl/lib/openfl/geom/Rectangle';
-import Bitmap from 'openfl/lib/openfl/display/Bitmap';
-import Point from 'openfl/lib/openfl/geom/Point';
+import AssetManifest from 'openfl/utils/AssetManifest';
+import Assets from 'openfl/utils/Assets';
+import BitmapData from 'openfl/display/BitmapData';
+import Matrix from 'openfl/geom/Matrix';
+import Rectangle from 'openfl/geom/Rectangle';
+import Bitmap from 'openfl/display/Bitmap';
+import Point from 'openfl/geom/Point';
 
 export default class SlotAssets extends AssetManifest {
   private static BITMAPS: { [name: string]: Bitmap } = {};

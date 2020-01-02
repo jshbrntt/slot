@@ -1,17 +1,17 @@
-import Assets from 'openfl/lib/openfl/utils/Assets';
-import Bitmap from 'openfl/lib/openfl/display/Bitmap';
+import Assets from 'openfl/utils/Assets';
+import Bitmap from 'openfl/display/Bitmap';
 import ConfigModel from './models/ConfigModel';
-import Keyboard from 'openfl/lib/openfl/ui/Keyboard';
+import Keyboard from 'openfl/ui/Keyboard';
 import KeyManager from './utils/KeyManager';
-import MouseEvent from 'openfl/lib/openfl/events/MouseEvent';
+import MouseEvent from 'openfl/events/MouseEvent';
 import ReelsController from './controllers/ReelsController';
 import ReelsModel from './models/ReelsModel';
 import ReelsView from './views/ReelsView';
 import Scene from './engine/core/Scene';
-import SimpleButton from 'openfl/lib/openfl/display/SimpleButton';
+import SimpleButton from 'openfl/display/SimpleButton';
 import SlotAssets from './SlotAssets';
-import TextField from 'openfl/lib/openfl/text/TextField';
-import TextFormat from 'openfl/lib/openfl/text/TextFormat';
+import TextField from 'openfl/text/TextField';
+import TextFormat from 'openfl/text/TextFormat';
 import XML from './stubs/XML';
 
 export default class SlotScene extends Scene {
