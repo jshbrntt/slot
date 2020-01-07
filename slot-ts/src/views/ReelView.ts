@@ -2,7 +2,7 @@ import View from '../engine/mvc/View';
 import IconModel from '../models/IconModel';
 import ReelModel from '../models/ReelModel';
 import IconView from './IconView';
-import { Easing, Tween } from '@tweenjs/tween.js';
+import TWEEN from '@tweenjs/tween.js';
 
 export default class ReelView extends View {
   private iconsViews: IconView[] = [];
@@ -17,6 +17,7 @@ export default class ReelView extends View {
     this.tweenCount = 0;
 
     this.setupInitialIcons();
+    this.spin();
   }
 
   public stop(stopPosition: number): void {
@@ -57,9 +58,9 @@ export default class ReelView extends View {
       this.tweenCount = this.iconsViews.length - 1;
       for (let i: number = 1; i < this.iconsViews.length; i++) {
         const iconView: IconView = this.iconsViews[i];
-        const tween: Tween = new Tween(iconView)
+        const tween: TWEEN.Tween = new TWEEN.Tween(iconView)
           .to({y: iconView.y + iconView.height})
-          .easing(Easing.Linear.None);
+          .easing(TWEEN.Easing.Linear.None);
         tween.onComplete = this.onShiftedReel;
       }
       this.addChild(newIconView);

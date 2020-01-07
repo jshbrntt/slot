@@ -4,7 +4,7 @@ import Sprite from 'openfl/display/Sprite';
 export default abstract class View extends Sprite {
   constructor(protected model: Model) {
     super();
-    this.addEventListener(Model.UPDATED, this.onUpdated);
+    this.addEventListener(Model.UPDATED, () => this.onUpdated());
   }
 
   protected onUpdated(): void {}

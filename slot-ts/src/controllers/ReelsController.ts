@@ -64,7 +64,7 @@ export default class ReelsController extends Controller {
     this.startReelIndex++;
 
     if (!this.startTimer.running) {
-      this.startTimer.addEventListener(TimerEvent.TIMER, this.startNextReel);
+      this.startTimer.addEventListener(TimerEvent.TIMER, () => this.startNextReel());
       this.startTimer.start();
     }
 
@@ -76,7 +76,7 @@ export default class ReelsController extends Controller {
   private spinStarted(): void {
     console.log('controllers.ReelsController.spinStarted');
     if (!this.stopTimer.running) {
-      this.stopTimer.addEventListener(TimerEvent.TIMER_COMPLETE, this.stopSpin);
+      this.stopTimer.addEventListener(TimerEvent.TIMER_COMPLETE, () => this.stopSpin());
       this.stopTimer.start();
     }
 

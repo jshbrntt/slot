@@ -22,7 +22,7 @@ export default class IconView extends View {
     const iconBitmaps = SlotAssets.getBitmaps('icon_');
     if (this.getModel().getId() < iconBitmaps.length - 1) {
       this.iconBitmap = iconBitmaps[this.getModel().getId()];
-      this.addChild(this.iconBitmap);
+      this.addChild(new Bitmap(this.iconBitmap.bitmapData));
     } else {
       throw new Error('Icon texture not found.');
     }

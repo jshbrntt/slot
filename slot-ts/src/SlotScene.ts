@@ -23,32 +23,19 @@ export default class SlotScene extends Scene {
   private spinButton: SimpleButton | null = null;
   private balanceField: TextField | null = null;
   private balance: number | null = null;
-  private errorField: TextField | null = null;
   private config: {
-    reels: number[][],
+    reels: number[][];
     prizes: {
-      lint: number[],
-      payout: number
-    }[]
+      lint: number[];
+      payout: number;
+    }[];
   };
 
   protected init(): void {
     super.init();
     this.config = JSON.parse(Assets.getText('config.json'));
-    KeyManager.pressed(Keyboard.SPACE, this.onSpinButtonTriggered);
+    KeyManager.pressed(Keyboard.SPACE, () => this.onSpinButtonTriggered());
     this.setup();
-  }
-
-  private displayError(text: string): void {
-    this.errorField = new TextField();
-    this.errorField.width = 800;
-    this.errorField.height = 600;
-    this.errorField.text = text;
-    this.errorField.embedFonts = true;
-    this.errorField.setTextFormat(
-      new TextFormat('Minecraftia', 32, 0xff0000, true)
-    );
-    this.addChild(this.errorField);
   }
 
   private setup(): void {
@@ -61,10 +48,7 @@ export default class SlotScene extends Scene {
   private setupReels(): void {
     this.reelsModel = new ReelsModel(this.config.reels);
     this.reelsView = new ReelsView(this.reelsModel);
-    this.reelsController = new ReelsController(
-      this.reelsModel,
-      this.reelsView
-    );
+    this.reelsController = new ReelsController(this.reelsModel, this.reelsView);
     this.addChild(this.reelsView);
   }
 
@@ -77,24 +61,25 @@ export default class SlotScene extends Scene {
   private setupButtons(): void {
     const btnUpBitmap = SlotAssets.getBitmap('ui_spin_up');
     const btnDownBitmap = SlotAssets.getBitmap('ui_spin_down');
-    this.spinButton = new SimpleButton(btnUpBitmap, btnUpBitmap, btnDownBitmap, btnUpBitmap);
+    this.spinButton = new SimpleButton(
+      btnUpBitmap,
+      btnUpBitmap,
+      btnDownBitmap,
+      btnUpBitmap
+    );
     this.spinButton.scaleX = this.spinButton.scaleY = 6;
     this.spinButton.x = 590;
     this.spinButton.y = 54;
     this.spinButton.addEventListener(
       MouseEvent.CLICK,
-      this.onSpinButtonTriggered
+      () => this.onSpinButtonTriggered()
     );
     this.addChild(this.spinButton);
   }
 
   private setupScore(): void {
     this.balance = 0;
-    const textFormat = new TextFormat(
-      'VT323',
-      38,
-      0xFF0000
-    );
+    const textFormat = new TextFormat('VT323', 38, 0xff0000);
     textFormat.align = TextFormatAlign.CENTER;
 
     this.balanceField = new TextField();
@@ -112,24 +97,23 @@ export default class SlotScene extends Scene {
   }
 
   private onSpinButtonTriggered(event: Event | null = null): void {
-    if (this.spinButton && this.reelsController) {
-      if (this.spinButton.enabled) {
-        if (this.reelsController.getSpinning()) {
-          this.reelsController.addEventListener(
-            ReelsController.STOPPING,
-            this.onReelsStopping,
-            { once: true }
-          );
-          this.reelsController.stopSpin();
-        } else {
-          this.reelsController.addEventListener(
-            ReelsController.STARTING,
-            this.onReelsStarting,
-            { once: true }
-          );
-          this.reelsController.startSpin();
-        }
-      }
+    if (!this.spinButton || !this.reelsController || !this.spinButton.enabled) {
+      return;
+    }
+    if (this.reelsController.getSpinning()) {
+      this.reelsController.addEventListener(
+        ReelsController.STOPPING,
+        () => this.onReelsStopping(),
+        { once: true }
+      );
+      this.reelsController.stopSpin();
+    } else {
+      this.reelsController.addEventListener(
+        ReelsController.STARTING,
+        () => this.onReelsStarting(),
+        { once: true }
+      );
+      this.reelsController.startSpin();
     }
   }
 
@@ -142,36 +126,39 @@ export default class SlotScene extends Scene {
   }
 
   private onReelsStarting(): void {
-    if (this.reelsController && this.spinButton) {
-      this.reelsController.addEventListener(
-        ReelsController.STARTED,
-        this.onReelsStarted,
-        { once: true }
-      );
-      this.spinButton.enabled = false;
+    if (!this.reelsController || !this.spinButton) {
+      return;
     }
+    this.reelsController.addEventListener(
+      ReelsController.STARTED,
+      () => this.onReelsStarted(),
+      { once: true }
+    );
+    this.spinButton.enabled = false;
   }
 
   private onReelsStarted(): void {
-    if (this.reelsController && this.spinButton) {
-      this.reelsController.addEventListener(
-        ReelsController.STOPPING,
-        this.onReelsStopping,
-        { once: true }
-      );
-      this.spinButton.enabled = true;
+    if (!this.reelsController || !this.spinButton) {
+      return;
     }
+    this.reelsController.addEventListener(
+      ReelsController.STOPPING,
+      () => this.onReelsStopping(),
+      { once: true }
+    );
+    this.spinButton.enabled = true;
   }
 
   private onReelsStopping(): void {
-    if (this.reelsController && this.spinButton) {
-      this.reelsController.addEventListener(
-        ReelsController.STOPPED,
-        this.onReelsStopped,
-        { once: true }
-      );
-      this.spinButton.enabled = false;
+    if (!this.reelsController || !this.spinButton) {
+      return; 
     }
+    this.reelsController.addEventListener(
+      ReelsController.STOPPED,
+      () => this.onReelsStopped(),
+      { once: true }
+    );
+    this.spinButton.enabled = false;
   }
 
   private onReelsStopped(): void {
