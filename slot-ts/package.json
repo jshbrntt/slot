@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {
     "@types/core-js": "^2.5.2",
+    "gh-pages": "^2.2.0",
     "npm-check": "^5.9.0",
     "openfl": "^8.9.5",
     "ts-loader": "^6.2.1",
@@ -18,13 +19,13 @@
     "build": "npm run build:prod",
     "build:dev": "webpack --config webpack.dev.js",
     "build:prod": "webpack --config webpack.prod.js",
+    "publish": "node scripts/publish.js",
     "start": "npm run start:dev",
     "start:dev": "webpack-dev-server --open --config webpack.dev.js",
     "start:prod": "webpack-dev-server --open --config webpack.prod.js",
     "upgrade": "npm-check -u"
   },
   "dependencies": {
-    "@tweenjs/tween.js": "^18.5.0",
     "actuate": "^1.8.9-beta"
   }
 }

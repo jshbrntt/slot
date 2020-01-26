@@ -2,6 +2,8 @@
 
 A basic slot machine example.
 
+- [Demo]
+
 ![Screenshot](/assets/screenshots/slot-flash_screenshot.png?raw=true "Screenshot")
 
 Created originally in Flash, as part of a technical test.
