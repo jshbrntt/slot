@@ -14,6 +14,13 @@ import TextFormat from 'openfl/text/TextFormat';
 import TextFormatAlign from 'openfl/text/TextFormatAlign';
 import GridFitType from 'openfl/text/GridFitType';
 import TextFieldAutoSize from 'openfl/text/TextFieldAutoSize';
+import ReelModel from './models/ReelModel';
+import IconModel from './models/IconModel';
+import ReelView from './views/ReelView';
+import IconView from './views/IconView';
+import Actuate from 'motion/Actuate';
+import Elastic from 'motion/easing/Elastic';
+import Linear from 'motion/easing/Linear';
 
 export default class SlotScene extends Scene {
   private reelsModel: ReelsModel | null = null;
@@ -40,16 +47,33 @@ export default class SlotScene extends Scene {
 
   private setup(): void {
     this.setupReels();
-    this.setupOverlay();
-    this.setupButtons();
-    this.setupScore();
+    // this.setupOverlay();
+    // this.setupButtons();
+    // this.setupScore();
   }
 
   private setupReels(): void {
-    this.reelsModel = new ReelsModel(this.config.reels);
-    this.reelsView = new ReelsView(this.reelsModel);
-    this.reelsController = new ReelsController(this.reelsModel, this.reelsView);
-    this.addChild(this.reelsView);
+    // this.reelsModel = new ReelsModel(this.config.reels);
+    // this.reelsView = new ReelsView(this.reelsModel);
+    // this.reelsController = new ReelsController(this.reelsModel, this.reelsView);
+
+    this.scaleX = this.scaleY = 6;
+    const iconModel = new IconModel(this.config.reels[0][0]);
+    const iconView = new IconView(iconModel);
+    this.addChild(iconView);
+
+    Actuate.tween(iconView, 10, { x: 200 })
+      .ease(Linear.easeNone)
+      .repeat()
+      .reflect();
+
+    // const reelModel = new ReelModel(this.config.reels[0].map(id => new IconModel(id)));
+    // const reelView = new ReelView(reelModel);
+    // reelView.scaleX = 4;
+    // reelView.scaleY = 4;
+    // reelView.y = 100;
+    // reelView.spin();
+    // this.addChild(reelView);
   }
 
   private setupOverlay(): void {
@@ -70,9 +94,8 @@ export default class SlotScene extends Scene {
     this.spinButton.scaleX = this.spinButton.scaleY = 6;
     this.spinButton.x = 590;
     this.spinButton.y = 54;
-    this.spinButton.addEventListener(
-      MouseEvent.CLICK,
-      () => this.onSpinButtonTriggered()
+    this.spinButton.addEventListener(MouseEvent.CLICK, () =>
+      this.onSpinButtonTriggered()
     );
     this.addChild(this.spinButton);
   }
@@ -151,7 +174,7 @@ export default class SlotScene extends Scene {
 
   private onReelsStopping(): void {
     if (!this.reelsController || !this.spinButton) {
-      return; 
+      return;
     }
     this.reelsController.addEventListener(
       ReelsController.STOPPED,

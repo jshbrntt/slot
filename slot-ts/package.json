@@ -24,6 +24,7 @@
     "upgrade": "npm-check -u"
   },
   "dependencies": {
-    "@tweenjs/tween.js": "^18.5.0"
+    "@tweenjs/tween.js": "^18.5.0",
+    "actuate": "^1.8.9-beta"
   }
 }
