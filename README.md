@@ -2,7 +2,7 @@
 
 A basic slot machine example.
 
-- [Demo]
+- [Demo][demo]
 
 ![Screenshot](/assets/screenshots/slot-flash_screenshot.png?raw=true "Screenshot")
 
@@ -15,6 +15,7 @@ So far been ported to the following languages.
 - [Dart][dart] ([StageXL][stagexl])
 - [TypeScript][typescript] ([OpenFL][openfl])
 
+[demo]:       https://synthecypher.github.io/slot/
 [dart]:       https://dart.dev/
 [stagexl]:    http://www.stagexl.org/
 [typescript]: https://www.typescriptlang.org/
