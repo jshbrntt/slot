@@ -28,85 +28,64 @@ export default class ReelsController extends Controller {
 
   public constructor(model: Model, view: View) {
     super(model, view);
-
     this.startTimer = new Timer(
       600,
       this.getModel().getReelModels().length - 1
     );
     this.stopTimer = new Timer(5000, 1);
-
     this.startReelIndex = 0;
     this.stopReelIndex = 0;
-
     this.spinning = false;
   }
 
-  public startSpin(event: Event | null = null): void {
-    console.log('controllers.ReelsController.startSpin');
-
+  public startSpin = (event: Event | null = null): void => {
     this.startTimer.reset();
     this.startReelIndex = 0;
-
     this.startNextReel();
-
     this.dispatchEvent(new Event(ReelsController.STARTING));
   }
 
-  private startNextReel(event: TimerEvent | null = null): void {
-    console.log(
-      'controllers.ReelsController.startNextReel',
-      this.startReelIndex
-    );
-    const reelView: ReelView = this.getView().getReelViews()[
-      this.startReelIndex
-    ];
+  private startNextReel = (event: TimerEvent | null = null): void => {
+    if (this.startTimer.running) {
+      this.startTimer.stop();
+      this.startTimer.removeEventListener(TimerEvent.TIMER, this.startNextReel);
+    }
+    const reelViews: ReelView[] = this.getView().getReelViews();
+    const reelView: ReelView = reelViews[this.startReelIndex];
     reelView.spin();
     this.startReelIndex++;
-
-    if (!this.startTimer.running) {
-      this.startTimer.addEventListener(TimerEvent.TIMER, () => this.startNextReel());
+    if (this.startReelIndex < reelViews.length) {
+      this.startTimer.addEventListener(TimerEvent.TIMER, this.startNextReel);
       this.startTimer.start();
-    }
-
-    if (this.startReelIndex === this.getView().getReelViews().length) {
+    } else {
       this.spinStarted();
     }
   }
 
-  private spinStarted(): void {
-    console.log('controllers.ReelsController.spinStarted');
+  private spinStarted = (): void => {
     if (!this.stopTimer.running) {
-      this.stopTimer.addEventListener(TimerEvent.TIMER_COMPLETE, () => this.stopSpin());
+      this.stopTimer.addEventListener(TimerEvent.TIMER_COMPLETE, () =>
+        this.stopSpin()
+      );
       this.stopTimer.start();
     }
-
     this.dispatchEvent(new Event(ReelsController.STARTED));
-
     this.spinning = true;
   }
 
-  public stopSpin(event: Event | null = null): void {
-    console.log('controllers.ReelsController.stopSpin');
-
+  public stopSpin = (event: Event | null = null): void => {
     this.stopTimer.removeEventListener(
       TimerEvent.TIMER_COMPLETE,
       this.stopSpin
     );
-
     this.stopTimer.reset();
     this.stopReelIndex = 0;
-
     this.stopNextReel();
-
     this.dispatchEvent(new Event(ReelsController.STOPPING));
   }
 
-  private stopNextReel(): void {
+  private stopNextReel = (): void => {
     if (this.stopReelIndex < this.getView().getReelViews().length) {
-      console.log(
-        'controllers.ReelsController.stopNextReel',
-        this.stopReelIndex
-      );
       const reelView: ReelView = this.getView().getReelViews()[
         this.stopReelIndex
       ];
@@ -122,9 +101,7 @@ export default class ReelsController extends Controller {
     }
   }
 
-  private spinFinished(): void {
-    console.log('controllers.ReelsController.spinFinished');
-
+  private spinFinished = (): void => {
     this.spinResult = null;
     for (const reelView of this.getView().getReelViews()) {
       const iconModel: IconModel | null = reelView.getIconView(2);
@@ -132,9 +109,7 @@ export default class ReelsController extends Controller {
         this.spinResult += iconModel.getId().toString();
       }
     }
-
     this.dispatchEvent(new Event(ReelsController.STOPPED));
-
     this.spinning = false;
   }
 

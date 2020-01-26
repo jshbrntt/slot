@@ -1,13 +1,14 @@
+import Actuate from 'motion/Actuate';
+import Linear from 'motion/easing/Linear';
 import View from '../engine/mvc/View';
 import IconModel from '../models/IconModel';
 import ReelModel from '../models/ReelModel';
 import IconView from './IconView';
-import TWEEN from '@tweenjs/tween.js';
 
 export default class ReelView extends View {
   private iconsViews: IconView[] = [];
   private tweenCount: number = 0;
-  private stopPosition: number = 0;
+  private stopPosition: number = NaN;
   public onStopped: Function | null = null;
 
   constructor(model: ReelModel) {
@@ -17,22 +18,20 @@ export default class ReelView extends View {
     this.tweenCount = 0;
 
     this.setupInitialIcons();
-    this.spin();
   }
 
-  public stop(stopPosition: number): void {
+  public stop = (stopPosition: number): void => {
     this.stopPosition = this.getModel().getLoopingIndex(stopPosition);
   }
 
-  public spin(): void {
+  public spin = (): void => {
     this.shiftReel();
   }
 
-  private shiftReel(): void {
-    // Removing bottom out of view icon.
+  private shiftReel = (): void => {
     if (this.iconsViews) {
+      // Removing last icon at the bottom of the reel.
       const iconView = this.iconsViews.pop();
-
       if (iconView) {
         this.removeChild(iconView);
       }
@@ -46,28 +45,28 @@ export default class ReelView extends View {
         position = 0;
       }
 
+      // Apply the new limited position to the reel.
       this.getModel().setPosition(position);
 
+      // Adding the next icon at the top of the reel.
       const newIconModel: IconModel = this.getModel().getIconModel(
         -2 + this.getModel().getPosition()
       );
       const newIconView: IconView = new IconView(newIconModel);
-
       this.iconsViews.unshift(newIconView);
 
       this.tweenCount = this.iconsViews.length - 1;
       for (let i: number = 1; i < this.iconsViews.length; i++) {
         const iconView: IconView = this.iconsViews[i];
-        const tween: TWEEN.Tween = new TWEEN.Tween(iconView)
-          .to({y: iconView.y + iconView.height})
-          .easing(TWEEN.Easing.Linear.None);
-        tween.onComplete = this.onShiftedReel;
+        Actuate.tween(iconView, 0.2, { y: iconView.y + iconView.height })
+          .ease(Linear.easeNone)
+          .onComplete(this.onShiftedReel);
       }
       this.addChild(newIconView);
     }
   }
 
-  private onShiftedReel(): void {
+  private onShiftedReel = (): void => {
     this.tweenCount--;
     if (this.tweenCount === 0) {
       // Stop spinning condition.
@@ -79,32 +78,31 @@ export default class ReelView extends View {
     }
   }
 
-  private stopReel(): void {
+  private stopReel = (): void => {
     this.stopPosition = NaN;
     if (this.onStopped) {
       this.onStopped.apply(this);
     }
   }
 
-  private setupInitialIcons(): void {
+  private setupInitialIcons = (): void => {
     for (let i: number = -2; i <= 2; i++) {
-      const iconView: IconView = new IconView(
-        this.getModel().getIconModel(i + this.getModel().getPosition())
-      );
+      const iconModel: IconModel = this.getModel().getIconModel(i + this.getModel().getPosition());
+      const iconView: IconView = new IconView(iconModel);
       this.addChild(iconView);
       iconView.y = (i + 2) * iconView.height;
       this.iconsViews.push(iconView);
     }
   }
 
-  public getIconView(index: number): IconModel | null {
+  public getIconView = (index: number): IconModel | null => {
     if (index < this.iconsViews.length) {
       return this.iconsViews[index].getModel();
     }
     return null;
   }
 
-  protected onUpdated(): void {
+  protected onUpdated = (): void => {
     super.onUpdated();
   }
 

@@ -14,13 +14,6 @@ import TextFormat from 'openfl/text/TextFormat';
 import TextFormatAlign from 'openfl/text/TextFormatAlign';
 import GridFitType from 'openfl/text/GridFitType';
 import TextFieldAutoSize from 'openfl/text/TextFieldAutoSize';
-import ReelModel from './models/ReelModel';
-import IconModel from './models/IconModel';
-import ReelView from './views/ReelView';
-import IconView from './views/IconView';
-import Actuate from 'motion/Actuate';
-import Elastic from 'motion/easing/Elastic';
-import Linear from 'motion/easing/Linear';
 
 export default class SlotScene extends Scene {
   private reelsModel: ReelsModel | null = null;
@@ -29,7 +22,7 @@ export default class SlotScene extends Scene {
   private overlayBitmap: Bitmap | null = null;
   private spinButton: SimpleButton | null = null;
   private balanceField: TextField | null = null;
-  private balance: number | null = null;
+  private balance: number = 0;
   private config: {
     reels: number[][];
     prizes: {
@@ -47,33 +40,16 @@ export default class SlotScene extends Scene {
 
   private setup(): void {
     this.setupReels();
-    // this.setupOverlay();
-    // this.setupButtons();
-    // this.setupScore();
+    this.setupOverlay();
+    this.setupButtons();
+    this.setupScore();
   }
 
   private setupReels(): void {
-    // this.reelsModel = new ReelsModel(this.config.reels);
-    // this.reelsView = new ReelsView(this.reelsModel);
-    // this.reelsController = new ReelsController(this.reelsModel, this.reelsView);
-
-    this.scaleX = this.scaleY = 6;
-    const iconModel = new IconModel(this.config.reels[0][0]);
-    const iconView = new IconView(iconModel);
-    this.addChild(iconView);
-
-    Actuate.tween(iconView, 10, { x: 200 })
-      .ease(Linear.easeNone)
-      .repeat()
-      .reflect();
-
-    // const reelModel = new ReelModel(this.config.reels[0].map(id => new IconModel(id)));
-    // const reelView = new ReelView(reelModel);
-    // reelView.scaleX = 4;
-    // reelView.scaleY = 4;
-    // reelView.y = 100;
-    // reelView.spin();
-    // this.addChild(reelView);
+    this.reelsModel = new ReelsModel(this.config.reels);
+    this.reelsView = new ReelsView(this.reelsModel);
+    this.reelsController = new ReelsController(this.reelsModel, this.reelsView);
+    this.addChild(this.reelsView);
   }
 
   private setupOverlay(): void {
@@ -158,6 +134,7 @@ export default class SlotScene extends Scene {
       { once: true }
     );
     this.spinButton.enabled = false;
+    this.spinButton.alpha = 0.5;
   }
 
   private onReelsStarted(): void {
@@ -170,6 +147,7 @@ export default class SlotScene extends Scene {
       { once: true }
     );
     this.spinButton.enabled = true;
+    this.spinButton.alpha = 1;
   }
 
   private onReelsStopping(): void {
@@ -182,6 +160,7 @@ export default class SlotScene extends Scene {
       { once: true }
     );
     this.spinButton.enabled = false;
+    this.spinButton.alpha = 0.5;
   }
 
   private onReelsStopped(): void {
@@ -190,10 +169,11 @@ export default class SlotScene extends Scene {
       this.config &&
       this.reelsController &&
       this.spinButton &&
-      this.balance &&
+      this.balance !== null &&
       this.balanceField
     ) {
       this.spinButton.enabled = true;
+      this.spinButton.alpha = 1;
       if (this.config.prizes[spinResult]) {
         const prize: number = this.config.prizes[spinResult];
         this.balance += prize;

@@ -4,7 +4,6 @@ import Assets from 'openfl/utils/Assets';
 import Sprite from 'openfl/display/Sprite';
 import Event from 'openfl/events/Event';
 import Scene from './Scene';
-import TWEEN from '@tweenjs/tween.js';
 
 export default class Game extends Sprite {
   public constructor(
@@ -60,14 +59,12 @@ export default class Game extends Sprite {
   public update(): void {
     this.passedTime = Date.now() - this.totalTime;
     this.totalTime += this.passedTime;
-    console.log('update', this.passedTime, this.totalTime);
     if (this.frameCount++ % 60 === 0) {
       this.frameRate = this.frameCount / this.totalTime;
       this.frameCount = this.totalTime = 0;
     }
     if (this.scene) {
       this.scene.update();
-      TWEEN.update(this.totalTime);
     }
   }
 
